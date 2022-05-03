@@ -1,0 +1,35 @@
+.alignCenter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.verticallyAlignCenter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* For Dashboard Changing content when selected from side menu without reloading */
+
+.displayBlock {
+    display: block;
+}
+
+.displayNone {
+    display: none;
+}
+
+.targetDiv {
+    min-height: 350px;
+}
