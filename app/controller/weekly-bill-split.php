@@ -115,14 +115,15 @@
             $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
+                    $id = $row['id'];
                     echo TR_OPEN;
                     if($isEditMode) {
                         echo '
                         <td>
                             <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" >
-                                <input type="hidden" name="personNameForDeleting" value="'.$row['name'].'">
+                                <input type="hidden" name="personForDeleting" value="'.$id.'">
                                 <input type="submit" value="Delete" onClick="return confirmSubmit()">
-                            </form> 
+                            </form>
                         </td>
                         ';
                     }
@@ -170,10 +171,10 @@
         }
 
         function deleteSinglePerson($conn, $conn2){
-            if(!empty($_POST["personNameForDeleting"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
+            if(!empty($_POST["personForDeleting"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 $bookId = $this->getBook($conn2)['book-id'];
-                $personName = trim($_POST["personNameForDeleting"]);
-                $sql = "DELETE FROM `weekly-bill-split` WHERE name = '$personName' AND `book-id` = '$bookId'";
+                $person = trim($_POST["personForDeleting"]);
+                $sql = "DELETE FROM `weekly-bill-split` WHERE `id` = '$person' AND `book-id` = '$bookId'";
                 $result =  $conn->query($sql);
                 if($result){
                     echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split?query=editMode"/>';
