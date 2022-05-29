@@ -1,7 +1,4 @@
 <?php
-
-use LDAP\Result;
-
     $weeklyBillSplitModel = new WeeklyBillSplitModel;
     const TD_OPEN = '<td>';
     const TD_CLOSE = '</td>';
@@ -141,7 +138,7 @@ use LDAP\Result;
                 }
             }
             else{
-                echo TR_OPEN, '<td colspan="8">'. '<p class="text-center mt-5"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
+                echo TR_OPEN, '<td colspan="8">'. '<p class="text-center mt-3"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
             }
         }
 
@@ -230,3 +227,4 @@ use LDAP\Result;
             }
         }
     }
+?>

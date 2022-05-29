@@ -21,6 +21,9 @@
 </head>
 
 <body>
+    <?php
+        if(isset($weeklyBillSplitController->getBook($conn)['book-name'])){
+    ?>
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewPersonModal">
         Add New Person
     </button>
@@ -38,8 +41,12 @@
             <li><a class="dropdown-item" href="/weekly-bill-split?query=editMode">Edit Mode</a></li>
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></li>
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changeBookModal">Change Book</a></li>
+           
         </ul>
     </div>
+    <?php
+        }
+    ?>
     <?php
     if ($isEditMode) {
         echo '<a class = "btn btn-danger" href="/weekly-bill-split"> Exit Edit Mode </a>';
@@ -59,7 +66,7 @@
 
     <?php if(!$displayReloadMessage) { ?>
     <table class="table table-borderless">
-        <p>Book Name : <b><?php echo $weeklyBillSplitController->getBook($conn)['book-name']; ?></b></p>
+        <?php echo isset($weeklyBillSplitController->getBook($conn)['book-name']) ? '<p>Book Name : <b>'. $weeklyBillSplitController->getBook($conn)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
         <thead>
             <tr>
                 <?php
