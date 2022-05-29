@@ -76,7 +76,7 @@
             $personName = trim($_POST["personName"]);
             $day = trim($_POST["day"]).'-amount';
             $bookId = $this->getBook($conn2)['book-id'];
-            $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE name = '$personName'";
+            $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
             $result = $conn->query($existingRecordSql)->fetch_assoc();
             $existingRecord = $result[$day];
             $newRecord = trim($_POST["billName"]) .':'. trim($_POST["amount"]) .'; ';
@@ -88,14 +88,14 @@
         }
 
         function insertNewMultiplePersonBillToDatabase($conn, $conn2){
-            $sqlToSelectNames = "SELECT name FROM `weekly-bill-split`";
+            $bookId = $this->getBook($conn2)['book-id'];
+            $sqlToSelectNames = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $names = $conn->query($sqlToSelectNames);
             if ($names->num_rows>0) {
                 while ($row = $names->fetch_assoc()) {
                     $personName = $row['name'];
                     $day = trim($_POST["day"]).'-amount';
-                    $bookId = $this->getBook($conn2)['book-id'];
-                    $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE name = '$personName'";
+                    $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
                     $result = $conn->query($existingRecordSql)->fetch_assoc();
                     $existingRecord = $result[$day];
                     $newRecord = trim($_POST["billName"]) .':'. trim($_POST["amount-for-$personName"]) .'; ';
@@ -119,7 +119,7 @@
                     if($isEditMode) {
                         echo '
                         <td>
-                            <form action="'.$this->deleteSinglePerson($conn).'" method="POST" >
+                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" >
                                 <input type="hidden" name="personNameForDeleting" value="'.$row['name'].'">
                                 <input type="submit" value="Delete" onClick="return confirmSubmit()">
                             </form> 
@@ -142,8 +142,9 @@
             }
         }
 
-        function getPersonNamesInSelectOptions($conn){
-            $sql = "SELECT name FROM `weekly-bill-split`";
+        function getPersonNamesInSelectOptions($conn, $conn2){
+            $bookId = $this -> getBook($conn2)['book-id'];
+            $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $result = $conn->query($sql);
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
@@ -154,8 +155,9 @@
             }
         }
 
-        function getPersonNamesInDisabledInput($conn){
-            $sql = "SELECT name FROM `weekly-bill-split`";
+        function getPersonNamesInDisabledInput($conn, $conn2){
+            $bookId = $this -> getBook($conn2)['book-id'];
+            $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $result = $conn->query($sql);
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
@@ -167,10 +169,11 @@
             }
         }
 
-        function deleteSinglePerson($conn){
+        function deleteSinglePerson($conn, $conn2){
             if(!empty($_POST["personNameForDeleting"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
+                $bookId = $this->getBook($conn2)['book-id'];
                 $personName = trim($_POST["personNameForDeleting"]);
-                $sql = "DELETE FROM `weekly-bill-split` WHERE name = '$personName'";
+                $sql = "DELETE FROM `weekly-bill-split` WHERE name = '$personName' AND `book-id` = '$bookId'";
                 $result =  $conn->query($sql);
                 if($result){
                     echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split?query=editMode"/>';
@@ -186,11 +189,17 @@
             return $row;
         }
 
-        function createNewBook($conn){
+        function createNewBook($conn, $conn2){
             if(!empty($_POST["bookName"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 $bookName = trim($_POST["bookName"]);
-                $user =  $_SESSION["username"];
-                $sql = "INSERT into `books` (`book-name`, `user`) VALUES ('$bookName', '$user')";
+                $user = $_SESSION["username"];
+                //To Deselect old book
+                {
+                    $currentBookId = $this -> getBook($conn2)['book-id'];
+                    $sqlToDeselectOldBook = "UPDATE `books` SET `is_selected_book` = null WHERE `book-id` = '$currentBookId'";
+                    $conn->query($sqlToDeselectOldBook);
+                }
+                $sql = "INSERT into `books` (`book-name`, `user`, is_selected_book) VALUES ('$bookName', '$user', 1)";
                 $result = $conn->query($sql);
                 $conn->close();
             }

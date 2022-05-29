@@ -4,7 +4,7 @@
     $functions -> loginRequired('weekly-bill-split');
     $weeklyBillSplitController = new WeeklyBillSplitController;
     $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
-    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn) || $weeklyBillSplitController -> changeBook($conn, $conn2);
+    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2);
 ?>
 
 <head>
@@ -154,7 +154,7 @@
                 <div class="modal-body">
                     <form action="<?php $weeklyBillSplitController->insertNewBill($conn, $conn2); ?>" method="POST">
                         <select name="personName">
-                            <?php $weeklyBillSplitController->getPersonNamesInSelectOptions($conn); ?>
+                            <?php $weeklyBillSplitController->getPersonNamesInSelectOptions($conn, $conn2); ?>
                         </select>
                         <input type="text" name="billName" placeholder="Name of the Bill"><br>
                         <select name="day">
@@ -197,7 +197,7 @@
                             <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
                             <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
                         </select> <br>
-                        <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn); ?>
+                        <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn, $conn2); ?>
                         <input type="submit" class="btn btn-success" value="Add">
                     </form>
                 </div>
@@ -217,7 +217,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="<?php $weeklyBillSplitController->createNewBook($conn) ?>">
+                    <form method="POST" action="<?php $weeklyBillSplitController->createNewBook($conn, $conn2) ?>">
                         <input type="text" name="bookName" placeholder="Book Name" /> <br>
                         <input type="submit" class="btn btn-success" value="Add">
                     </form>
