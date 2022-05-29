@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+    $functions -> loginRequired('weekly-bill-split');
     $weeklyBillSplitController = new WeeklyBillSplitController;
     $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
-    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> insertNewBill($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> insertNewMultiplePersonBill($weeklyBillSplitModel, $conn);
+    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> insertNewBill($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> createNewBook($conn) || $weeklyBillSplitController -> changeBook($conn);
 ?>
 
 <head>
@@ -35,6 +36,8 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="moreDropdownButton">
             <li><a class="dropdown-item" href="/weekly-bill-split?query=editMode">Edit Mode</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changeBookModal">Change Book</a></li>
         </ul>
     </div>
     <?php
@@ -43,12 +46,20 @@
     }
     ?>
     <?php if($displayReloadMessage) {
-        echo '<p class="text-center"> Record added, updating please wait. </p>';
+        echo '
+        <div class="alignCenter">
+            <p class="displayInline"> Updating please wait. </p>
+            <div class="spinner-border spinner-border-sm displayInline" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        ' ;
         echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split"/>';
     }?>
 
     <?php if(!$displayReloadMessage) { ?>
     <table class="table table-borderless">
+        <p>Book Name : <b><?php echo $weeklyBillSplitController->getBook($conn)['book-name']; ?></b></p>
         <thead>
             <tr>
                 <?php
@@ -189,6 +200,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Create New Book Modal -->
+    <div class="modal" tabindex="-1" id="createNewBookModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="<?php $weeklyBillSplitController->createNewBook($conn) ?>">
+                        <input type="text" name="bookName" placeholder="Book Name" /> <br>
+                        <input type="submit" class="btn btn-success" value="Add">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Book Modal -->
+    <div class="modal" tabindex="-1" id="changeBookModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="<?php $weeklyBillSplitController->changeBook($conn) ?>">
+                        <select name = "bookIdToChange">
+                            <?php $weeklyBillSplitController->showListOfBooksInSelect($conn); ?>
+                        </select>
+                        <input type="submit" class="btn btn-success" value="Change">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

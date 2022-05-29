@@ -1,4 +1,7 @@
 <?php
+
+use LDAP\Result;
+
     $weeklyBillSplitModel = new WeeklyBillSplitModel;
     const TD_OPEN = '<td>';
     const TD_CLOSE = '</td>';
@@ -30,7 +33,7 @@
 
         function insertNewPersonToDatabase($weeklyBillSplitModel, $conn){
             $weeklyBillSplitModel -> setName(trim($_POST["name"]));
-            $bookId = 0;
+            $bookId = $this->getBook($conn)['book-id'];
             $name = ($weeklyBillSplitModel -> getName()) != null ? $weeklyBillSplitModel -> getName() : '';
             $billName = trim($_POST["billName"]);
             switch (trim($_POST["day"])) {
@@ -75,7 +78,7 @@
         function insertNewSinglePersonBillToDatabase($weeklyBillSplitModel, $conn){
             $personName = trim($_POST["personName"]);
             $day = trim($_POST["day"]).'-amount';
-            $bookId = 0;
+            $bookId = $this->getBook($conn)['book-id'];
             $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE name = '$personName'";
             $result = $conn->query($existingRecordSql)->fetch_assoc();
             $existingRecord = $result[$day];
@@ -94,7 +97,7 @@
                 while ($row = $names->fetch_assoc()) {
                     $personName = $row['name'];
                     $day = trim($_POST["day"]).'-amount';
-                    $bookId = 0;
+                    $bookId = $this->getBook($conn)['book-id'];
                     $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE name = '$personName'";
                     $result = $conn->query($existingRecordSql)->fetch_assoc();
                     $existingRecord = $result[$day];
@@ -103,13 +106,14 @@
                     $sql = "UPDATE `weekly-bill-split` SET `$day` = '$modifiedRecord' WHERE `book-id` = '$bookId' AND `name` = '$personName'";
                     $result = $conn->query($sql);
                 }
+                $conn->close();
             }
-            $conn->close();
             return $result;                        
         }
 
         function getDatas($conn){
-            $sql = "SELECT * FROM `weekly-bill-split`";
+            $bookId = $this->getBook($conn)['book-id'];
+            $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $result = $conn->query($sql);
             $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
             if ($result->num_rows>0) {
@@ -135,6 +139,9 @@
                     TD_OPEN, $row['sunday-amount'], TD_CLOSE,
                     TR_CLOSE;
                 }
+            }
+            else{
+                echo TR_OPEN, '<td colspan="8">'. '<p class="text-center mt-5"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
             }
         }
 
@@ -170,6 +177,55 @@
                 $result =  $conn->query($sql);
                 if($result){
                     echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split?query=editMode"/>';
+                }
+            }
+        }
+
+        function getBook($conn){
+            $user =  $_SESSION["username"];
+            $sql = "SELECT `book-id`, `book-name` FROM `books` WHERE user = '$user' AND is_selected_book = 1";
+            $result = $conn->query($sql);
+            $row = $result->fetch_assoc();
+            return $row;
+        }
+
+        function createNewBook($conn){
+            if(!empty($_POST["bookName"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
+                $bookName = trim($_POST["bookName"]);
+                $user =  $_SESSION["username"];
+                $sql = "INSERT into `books` (`book-name`, `user`) VALUES ('$bookName', '$user')";
+                $result = $conn->query($sql);
+                $conn->close();
+            }
+            return $result;
+        }
+
+        function changeBook($conn){
+            if(!empty($_POST["bookIdToChange"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
+                $bookToChange = trim($_POST["bookIdToChange"]);
+                $currentBookId = $this -> getBook($conn)['book-id'];
+                $sqlToDeselectOldBook = "UPDATE `books` SET `is_selected_book` = null WHERE `book-id` = '$currentBookId'";
+                $isOldBookDeselected = $conn->query($sqlToDeselectOldBook);
+                if($isOldBookDeselected){
+                    $sql = "UPDATE `books` SET `is_selected_book` = 1 WHERE `book-id` = '$bookToChange'";
+                    $result = $conn->query($sql);
+                    $conn->close();
+                }
+            }
+            return $result;
+        }
+
+        function showListOfBooksInSelect($conn){
+            $user =  $_SESSION["username"];
+            $currentBookId = $this -> getBook($conn)['book-id'];
+            $sql = "SELECT `book-name`, `book-id` FROM `books` WHERE user = '$user'";
+            $result = $conn->query($sql);
+            if ($result->num_rows>0) {
+                while ($row = $result->fetch_assoc()) {
+                    $selected = $row['book-id'] == $currentBookId ? ' selected' : '';
+                    echo '<option value = "'.$row['book-id'].'" '.$selected.'>'.
+                    $row['book-name'].
+                    '</option>';
                 }
             }
         }

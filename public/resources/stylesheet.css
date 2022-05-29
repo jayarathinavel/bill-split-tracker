@@ -30,6 +30,10 @@ footer {
     display: none;
 }
 
+.displayInline {
+    display: inline;
+}
+
 .targetDiv {
     min-height: 350px;
 }
