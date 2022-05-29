@@ -28,7 +28,7 @@
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item m-1">
-                            <a href="test1" class="nav-link <?php echo $page == '/test1' ? 'active' : ''; ?> <?php echo isset($classes['navbar-btn']) ? $classes['navbar-btn'] : 'btn btn-sm btn-secondary';?>"> Test Page 1 </a>
+                            <a href="weekly-bill-split" class="nav-link <?php echo $page == '/weekly-bill-split' ? 'active' : ''; ?> <?php echo isset($classes['navbar-btn']) ? $classes['navbar-btn'] : 'btn btn-sm btn-secondary';?>"> Weekly Bill Split </a>
                         </li>
                         <li class="nav-item m-1">
                             <a href="test2" class="nav-link <?php echo $page == '/test2' ? 'active' : ''; ?> <?php echo isset($classes['navbar-btn']) ? $classes['navbar-btn'] : 'btn btn-sm btn-secondary';?>"> Test Page 2 </a>

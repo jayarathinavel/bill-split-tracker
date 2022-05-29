@@ -13,3 +13,11 @@ $(document).ready(function () {
         $(this).addClass("active");
     });
 });
+
+function confirmSubmit() {
+    var agree = confirm("Are you sure you wish to delete?");
+    if (agree)
+        return true;
+    else
+        return false;
+}
