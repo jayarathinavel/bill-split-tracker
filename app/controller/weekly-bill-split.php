@@ -122,7 +122,7 @@
                         <td>
                             <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" >
                                 <input type="hidden" name="personForDeleting" value="'.$id.'">
-                                <input type="submit" value="Delete" onClick="return confirmSubmit()">
+                                <button class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i> </button>
                             </form>
                         </td>
                         ';
