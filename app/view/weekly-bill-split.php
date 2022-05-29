@@ -4,7 +4,7 @@
     $functions -> loginRequired('weekly-bill-split');
     $weeklyBillSplitController = new WeeklyBillSplitController;
     $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
-    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> insertNewBill($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) || $weeklyBillSplitController -> createNewBook($conn) || $weeklyBillSplitController -> changeBook($conn);
+    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn) || $weeklyBillSplitController -> changeBook($conn, $conn2);
 ?>
 
 <head>
@@ -22,7 +22,7 @@
 
 <body>
     <?php
-        if(isset($weeklyBillSplitController->getBook($conn)['book-name'])){
+        if(isset($weeklyBillSplitController->getBook($conn2)['book-name'])){
     ?>
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewPersonModal">
         Add New Person
@@ -66,7 +66,7 @@
 
     <?php if(!$displayReloadMessage) { ?>
     <table class="table table-borderless">
-        <?php echo isset($weeklyBillSplitController->getBook($conn)['book-name']) ? '<p>Book Name : <b>'. $weeklyBillSplitController->getBook($conn)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
+        <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p>Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
         <thead>
             <tr>
                 <?php
@@ -105,7 +105,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php $weeklyBillSplitController->getDatas($conn); ?>
+            <?php $weeklyBillSplitController->getDatas($conn, $conn2); ?>
         </tbody>
     </table>
     <?php } ?>
@@ -120,7 +120,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?php $weeklyBillSplitController->insertNewPerson($weeklyBillSplitModel, $conn); ?>" method="POST">
+                    <form action="<?php $weeklyBillSplitController->insertNewPerson($weeklyBillSplitModel, $conn, $conn2); ?>" method="POST">
                         <input type="text" name="name" placeholder="Name of the Person"><br>
                         <input type="text" name="billName" placeholder="Name of the Bill"><br>
                         <select name="day">
@@ -152,7 +152,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?php $weeklyBillSplitController->insertNewBill($weeklyBillSplitModel, $conn); ?>" method="POST">
+                    <form action="<?php $weeklyBillSplitController->insertNewBill($conn, $conn2); ?>" method="POST">
                         <select name="personName">
                             <?php $weeklyBillSplitController->getPersonNamesInSelectOptions($conn); ?>
                         </select>
@@ -238,9 +238,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="<?php $weeklyBillSplitController->changeBook($conn) ?>">
+                    <form method="POST" action="<?php $weeklyBillSplitController->changeBook($conn, $conn2) ?>">
                         <select name = "bookIdToChange">
-                            <?php $weeklyBillSplitController->showListOfBooksInSelect($conn); ?>
+                            <?php $weeklyBillSplitController->showListOfBooksInSelect($conn, $conn2); ?>
                         </select>
                         <input type="submit" class="btn btn-success" value="Change">
                     </form>

@@ -7,30 +7,30 @@
 
     class WeeklyBillSplitController{
         //Add New Person
-        function insertNewPerson($weeklyBillSplitModel, $conn){
+        function insertNewPerson($weeklyBillSplitModel, $conn, $conn2){
             if(!empty($_POST["name"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
-                $result = $this -> insertNewPersonToDatabase($weeklyBillSplitModel, $conn);
+                $result = $this -> insertNewPersonToDatabase($weeklyBillSplitModel, $conn, $conn2);
             }
             return $result;
         }
         //Add New Bill to Single Person
-        function insertNewBill($weeklyBillSplitModel, $conn){
+        function insertNewBill($conn, $conn2){
             if(!empty($_POST["personName"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
-                $result = $this -> insertNewSinglePersonBillToDatabase($weeklyBillSplitModel, $conn);
+                $result = $this -> insertNewSinglePersonBillToDatabase($conn, $conn2);
             }
             return $result;
         }
         //Add New Bill to Multiple Person
-        function insertNewMultiplePersonBill($weeklyBillSplitModel, $conn){
+        function insertNewMultiplePersonBill($conn, $conn2){
             if(!empty($_POST["billName"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
-                $result = $this -> insertNewMultiplePersonBillToDatabase($weeklyBillSplitModel, $conn);
+                $result = $this -> insertNewMultiplePersonBillToDatabase($conn, $conn2);
             }
             return $result;
         }
 
-        function insertNewPersonToDatabase($weeklyBillSplitModel, $conn){
+        function insertNewPersonToDatabase($weeklyBillSplitModel, $conn, $conn2){
             $weeklyBillSplitModel -> setName(trim($_POST["name"]));
-            $bookId = $this->getBook($conn)['book-id'];
+            $bookId = $this->getBook($conn2)['book-id'];
             $name = ($weeklyBillSplitModel -> getName()) != null ? $weeklyBillSplitModel -> getName() : '';
             $billName = trim($_POST["billName"]);
             switch (trim($_POST["day"])) {
@@ -72,10 +72,10 @@
             return $result;
         }
 
-        function insertNewSinglePersonBillToDatabase($weeklyBillSplitModel, $conn){
+        function insertNewSinglePersonBillToDatabase($conn, $conn2){
             $personName = trim($_POST["personName"]);
             $day = trim($_POST["day"]).'-amount';
-            $bookId = $this->getBook($conn)['book-id'];
+            $bookId = $this->getBook($conn2)['book-id'];
             $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE name = '$personName'";
             $result = $conn->query($existingRecordSql)->fetch_assoc();
             $existingRecord = $result[$day];
@@ -87,14 +87,14 @@
             return $result;
         }
 
-        function insertNewMultiplePersonBillToDatabase($weeklyBillSplitModel, $conn){
+        function insertNewMultiplePersonBillToDatabase($conn, $conn2){
             $sqlToSelectNames = "SELECT name FROM `weekly-bill-split`";
             $names = $conn->query($sqlToSelectNames);
             if ($names->num_rows>0) {
                 while ($row = $names->fetch_assoc()) {
                     $personName = $row['name'];
                     $day = trim($_POST["day"]).'-amount';
-                    $bookId = $this->getBook($conn)['book-id'];
+                    $bookId = $this->getBook($conn2)['book-id'];
                     $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE name = '$personName'";
                     $result = $conn->query($existingRecordSql)->fetch_assoc();
                     $existingRecord = $result[$day];
@@ -108,8 +108,8 @@
             return $result;                        
         }
 
-        function getDatas($conn){
-            $bookId = $this->getBook($conn)['book-id'];
+        function getDatas($conn, $conn2){
+            $bookId = $this->getBook($conn2)['book-id'];
             $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $result = $conn->query($sql);
             $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
@@ -178,10 +178,10 @@
             }
         }
 
-        function getBook($conn){
+        function getBook($conn2){
             $user =  $_SESSION["username"];
             $sql = "SELECT `book-id`, `book-name` FROM `books` WHERE user = '$user' AND is_selected_book = 1";
-            $result = $conn->query($sql);
+            $result = $conn2->query($sql);
             $row = $result->fetch_assoc();
             return $row;
         }
@@ -197,10 +197,10 @@
             return $result;
         }
 
-        function changeBook($conn){
+        function changeBook($conn, $conn2){
             if(!empty($_POST["bookIdToChange"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 $bookToChange = trim($_POST["bookIdToChange"]);
-                $currentBookId = $this -> getBook($conn)['book-id'];
+                $currentBookId = $this -> getBook($conn2)['book-id'];
                 $sqlToDeselectOldBook = "UPDATE `books` SET `is_selected_book` = null WHERE `book-id` = '$currentBookId'";
                 $isOldBookDeselected = $conn->query($sqlToDeselectOldBook);
                 if($isOldBookDeselected){
@@ -212,9 +212,9 @@
             return $result;
         }
 
-        function showListOfBooksInSelect($conn){
+        function showListOfBooksInSelect($conn, $conn2){
             $user =  $_SESSION["username"];
-            $currentBookId = $this -> getBook($conn)['book-id'];
+            $currentBookId = $this -> getBook($conn2)['book-id'];
             $sql = "SELECT `book-name`, `book-id` FROM `books` WHERE user = '$user'";
             $result = $conn->query($sql);
             if ($result->num_rows>0) {
