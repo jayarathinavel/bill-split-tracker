@@ -65,7 +65,7 @@
     }?>
 
     <?php if(!$displayReloadMessage) { ?>
-    <table class="table table-borderless">
+    <table class="table table-borderless" id="weeklyBillSplitTable">
         <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p>Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
         <thead>
             <tr>

@@ -21,3 +21,18 @@ function confirmSubmit() {
     else
         return false;
 }
+
+//For Datatables
+$(document).ready(function () {
+    $('#weeklyBillSplitTable').DataTable({
+        paging: true,
+        "bLengthChange": false,
+        "pageLength": 50,
+        "dom": '<"pull-left"f><"pull-right"l>tip',
+        "language": {
+            "search": "_INPUT_",
+            "searchPlaceholder": "Search"
+        },
+        responsive: true,
+    });
+});
