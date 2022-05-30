@@ -25,14 +25,13 @@ function confirmSubmit() {
 //For Datatables
 $(document).ready(function () {
     $('#weeklyBillSplitTable').DataTable({
-        paging: true,
+        paging: false,
         "bLengthChange": false,
-        "pageLength": 50,
         "dom": '<"pull-left"f><"pull-right"l>tip',
         "language": {
             "search": "_INPUT_",
             "searchPlaceholder": "Search"
-        },
+        },        
         responsive: true,
     });
 });

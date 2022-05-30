@@ -110,7 +110,9 @@
         <tbody>
             <?php $weeklyBillSplitController->getDatas($conn, $conn2); ?>
         </tbody>
-        <?php $weeklyBillSplitController->findAndRenderDayTotal($conn, $conn2); ?>
+        <tfoot>
+            <?php $weeklyBillSplitController->findAndRenderDayTotal($conn, $conn2); ?>
+        </tfoot>
     </table>
     <?php } ?>
 
