@@ -24,14 +24,14 @@
     <?php
         if(isset($weeklyBillSplitController->getBook($conn2)['book-name'])){
     ?>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewPersonModal">
-        Add New Person
+    <button  title="Add New Person" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewPersonModal">
+        <i class="bi bi-person-plus-fill"></i>
     </button>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBillModal">
-        Add New Bill
+    <button type="button" title="Add New Bill "class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBillModal">
+        <i class="bi bi-plus-circle"></i>
     </button>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMultipleBillModal">
-        Add New Bill to All
+    <button type="button"  title="Add New Bill to All" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMultipleBillModal">
+        <i class="bi bi-plus-lg"></i><i class="bi bi-people-fill"></i>
     </button>
     <div class="btn-group">
         <button class="btn btn-primary dropdown-toggle" type="button" id="moreDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
