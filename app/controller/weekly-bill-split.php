@@ -4,6 +4,9 @@
     const TD_CLOSE = '</td>';
     const TR_OPEN = '<tr>';
     const TR_CLOSE = '</tr>';
+    const BR_TAG = '<br>';
+    const TOTAL_OPEN = '<b>';
+    const TOTAL_CLOSE = '</b>';
 
     class WeeklyBillSplitController{
         //Add New Person
@@ -128,19 +131,92 @@
                         ';
                     }
                     echo TD_OPEN, $row['name'], TD_CLOSE,
-                    TD_OPEN, $row['monday-amount'], TD_CLOSE,
-                    TD_OPEN, $row['tuesday-amount'], TD_CLOSE,
-                    TD_OPEN, $row['wednesday-amount'], TD_CLOSE,
-                    TD_OPEN, $row['thursday-amount'], TD_CLOSE,
-                    TD_OPEN, $row['friday-amount'], TD_CLOSE,
-                    TD_OPEN, $row['saturday-amount'], TD_CLOSE,
-                    TD_OPEN, $row['sunday-amount'], TD_CLOSE,
+                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, $this -> findIndividualWeekTotal($row), TD_CLOSE,
                     TR_CLOSE;
                 }
             }
             else{
                 echo TR_OPEN, '<td colspan="8">'. '<p class="text-center mt-3"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
             }
+        }
+
+        function removeSymbolsAndFormatData($data){
+            $data = str_replace(':', ' - ', $data);
+            $data = str_replace(';','<br>', $data);
+            return $data; 
+        }
+
+        function individualDayTotal($data){
+            $amountArray = array();
+            $amountValuesArray = array();
+            $amountBillNameArray = explode(';', trim($data));
+            foreach($amountBillNameArray as $amountBillName){
+                $amountArray[] = explode(':', trim($amountBillName));
+            }
+            foreach($amountArray as $amount){
+                $amountValuesArray[] = $amount[1];
+            }
+            $total = array_sum($amountValuesArray);
+            if($total == 0){
+                $total = "";
+            }
+            return $total;
+        }
+
+        function findIndividualWeekTotal($row) {
+            $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+            $daysAmount = array();
+            foreach($days as $day){
+                $day = $day.'-amount';
+                $daysAmount[] = $this -> individualDayTotal($row[$day]);
+            }
+            return array_sum($daysAmount);
+        }
+
+        function findAndRenderDayTotal($conn, $conn2){
+            $bookId = $this->getBook($conn2)['book-id'];
+            $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
+            $result = $conn->query($sql);
+            $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
+            $mondayAmount = array();
+            $tuesdayAmount = array();
+            $wednesdayAmount = array();
+            $thursdayAmount = array();
+            $fridayAmount = array();
+            $saturdayAmount = array();
+            $sundayAmount = array();
+            if ($result->num_rows>0) {
+                while ($row = $result->fetch_assoc()) {
+                    $mondayAmount[] = $this -> individualDayTotal($row['monday-amount']);
+                    $tuesdayAmount[] = $this -> individualDayTotal($row['tuesday-amount']);
+                    $wednesdayAmount[] = $this -> individualDayTotal($row['wednesday-amount']);
+                    $thursdayAmount[] = $this -> individualDayTotal($row['thursday-amount']);
+                    $fridayAmount[] = $this -> individualDayTotal($row['friday-amount']);
+                    $saturdayAmount[] = $this -> individualDayTotal($row['saturday-amount']);
+                    $sundayAmount[] = $this -> individualDayTotal($row['sunday-amount']);
+                }
+            }
+            echo TR_OPEN;
+            if($isEditMode){
+                echo TD_OPEN, TD_CLOSE;
+            }
+                echo TD_OPEN, '<b> Day total </b>' , TD_CLOSE, //For Name Column
+                TD_OPEN, array_sum($mondayAmount), TD_CLOSE,
+                TD_OPEN, array_sum($tuesdayAmount), TD_CLOSE,
+                TD_OPEN, array_sum($wednesdayAmount), TD_CLOSE,
+                TD_OPEN, array_sum($thursdayAmount), TD_CLOSE,
+                TD_OPEN, array_sum($fridayAmount), TD_CLOSE,
+                TD_OPEN, array_sum($saturdayAmount), TD_CLOSE,
+                TD_OPEN, array_sum($sundayAmount), TD_CLOSE,
+                TD_OPEN, TD_CLOSE, //For Person Total Column
+            TR_CLOSE;
         }
 
         function getPersonNamesInSelectOptions($conn, $conn2){

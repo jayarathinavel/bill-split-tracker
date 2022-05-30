@@ -102,11 +102,15 @@
                 <th scope="col">
                     Sunday
                 </th>
+                <th scope="col">
+                    Person total
+                </th>
             </tr>
         </thead>
         <tbody>
             <?php $weeklyBillSplitController->getDatas($conn, $conn2); ?>
         </tbody>
+        <?php $weeklyBillSplitController->findAndRenderDayTotal($conn, $conn2); ?>
     </table>
     <?php } ?>
 
