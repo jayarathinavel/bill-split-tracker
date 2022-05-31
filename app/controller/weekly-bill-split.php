@@ -9,6 +9,9 @@
     const TOTAL_CLOSE = '</b>';
     const DIV_OPEN = '<div>';
     const DIV_CLOSE = '</div>';
+    const TD_YESTERDAY = '<td id="yesterday">';
+    const TD_TODAY = '<td id="today">';
+
 
     class WeeklyBillSplitController{
         //Add New Person
@@ -118,6 +121,8 @@
             $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $result = $conn->query($sql);
             $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
+            $today = strtolower(date('l')).'-amount';
+            $yesterday = strtolower(date('l',strtotime("-1 days"))).'-amount';
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
                     $id = $row['id'];
@@ -133,6 +138,9 @@
                         ';
                     }
                     echo TD_OPEN, $row['name'], TD_CLOSE,
+                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, TD_CLOSE,
+                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, TD_CLOSE,
+
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, TD_CLOSE,
@@ -165,9 +173,9 @@
             foreach($amountArray as $amount){
                 $amountValuesArray[] = $amount[1];
             }
-            $total = array_sum($amountValuesArray);
-            if($total == 0){
-                $total = "";
+            $total = array_sum($amountValuesArray).' ₹';
+            if($total == '0 ₹'){
+                $total = "-";
             }
             return $total;
         }
@@ -210,6 +218,7 @@
                 echo TD_OPEN, TD_CLOSE;
             }
                 echo TD_OPEN, '<b> Day total </b>' , TD_CLOSE, //For Name Column
+                TD_TODAY, TD_CLOSE, TD_YESTERDAY, TD_CLOSE,
                 TD_OPEN, array_sum($mondayAmount), TD_CLOSE,
                 TD_OPEN, array_sum($tuesdayAmount), TD_CLOSE,
                 TD_OPEN, array_sum($wednesdayAmount), TD_CLOSE,

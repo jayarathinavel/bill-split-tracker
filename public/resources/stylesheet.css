@@ -37,3 +37,16 @@ footer {
 .targetDiv {
     min-height: 350px;
 }
+
+#todayAndYesterday{
+    display: none;
+}
+
+#weeklyBillSplitTable {
+    font-size: small;
+}
+
+td{
+    text-align: center;
+    vertical-align: middle;
+}

@@ -63,7 +63,14 @@
         ' ;
         echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split"/>';
     }?>
-
+    <script>
+        var today = document.getElementById("today");
+        var yesterday = document.getElementById("yesterday");
+        if (window.screen.height <= 400 ){
+            today.stylestyle.removeProperty("display");
+            yesterday.stylestyle.removeProperty("display");
+        }
+    </script>
     <?php if(!$displayReloadMessage) { ?>
     <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p class="mt-3">Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
     <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%" >
@@ -72,37 +79,43 @@
                 <?php
                 if ($isEditMode) {
                     echo '
-                            <th scope="col">
+                            <th scope="col" class="text-center">
                                 Action
                             </th>
                             ';
                 }
                 ?>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Name
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center" id="today">
+                    Today
+                </th>
+                <th scope="col" class="text-center" id="yesterday">
+                    Yesterday
+                </th>
+                <th scope="col" class="text-center">
                     Monday
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Tuesday
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Wednesday
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Thursday
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Friday
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Saturday
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Sunday
                 </th>
-                <th scope="col">
+                <th scope="col" class="text-center">
                     Person total
                 </th>
             </tr>
