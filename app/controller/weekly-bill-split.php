@@ -244,6 +244,8 @@
             $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $result = $conn->query($sql);
             $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
+            $today = strtolower(date('l')).'-amount';
+            $yesterday = strtolower(date('l',strtotime("-1 days"))).'-amount';
             $mondayAmount = array();
             $tuesdayAmount = array();
             $wednesdayAmount = array();
@@ -251,8 +253,12 @@
             $fridayAmount = array();
             $saturdayAmount = array();
             $sundayAmount = array();
+            $todayAmount = array();
+            $yesterdayAmount = array();
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
+                    $todayAmount[] = $this -> individualDayTotal($row[$today]);
+                    $yesterdayAmount[] = $this -> individualDayTotal($row[$yesterday]);
                     $mondayAmount[] = $this -> individualDayTotal($row['monday-amount']);
                     $tuesdayAmount[] = $this -> individualDayTotal($row['tuesday-amount']);
                     $wednesdayAmount[] = $this -> individualDayTotal($row['wednesday-amount']);
@@ -267,7 +273,8 @@
                 echo TD_OPEN, TD_CLOSE;
             }
                 echo TD_OPEN, '<b> Day total </b>' , TD_CLOSE, //For Name Column
-                TD_TODAY, TD_CLOSE, TD_YESTERDAY, TD_CLOSE,
+                TD_TODAY, array_sum($todayAmount), TD_CLOSE, 
+                TD_YESTERDAY, array_sum($yesterdayAmount), TD_CLOSE,
                 TD_OPEN, array_sum($mondayAmount), TD_CLOSE,
                 TD_OPEN, array_sum($tuesdayAmount), TD_CLOSE,
                 TD_OPEN, array_sum($wednesdayAmount), TD_CLOSE,
