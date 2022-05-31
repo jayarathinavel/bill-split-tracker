@@ -11,6 +11,7 @@
     const DIV_CLOSE = '</div>';
     const TD_YESTERDAY = '<td id="yesterday">';
     const TD_TODAY = '<td id="today">';
+    const CURRENCY = ' ₹';
 
 
     class WeeklyBillSplitController{
@@ -69,7 +70,7 @@
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), CURRENCY, TD_CLOSE,
                     TR_CLOSE;
                 }
             }
@@ -222,8 +223,8 @@
             foreach($amountArray as $amount){
                 $amountValuesArray[] = $amount[1];
             }
-            $total = array_sum($amountValuesArray).' ₹';
-            if($total == '0 ₹'){
+            $total = array_sum($amountValuesArray).CURRENCY;
+            if($total == '0'.CURRENCY){
                 $total = "-";
             }
             return $total;
@@ -273,15 +274,15 @@
                 echo TD_OPEN, TD_CLOSE;
             }
                 echo TD_OPEN, '<b> Day total </b>' , TD_CLOSE, //For Name Column
-                TD_TODAY, array_sum($todayAmount), TD_CLOSE, 
-                TD_YESTERDAY, array_sum($yesterdayAmount), TD_CLOSE,
-                TD_OPEN, array_sum($mondayAmount), TD_CLOSE,
-                TD_OPEN, array_sum($tuesdayAmount), TD_CLOSE,
-                TD_OPEN, array_sum($wednesdayAmount), TD_CLOSE,
-                TD_OPEN, array_sum($thursdayAmount), TD_CLOSE,
-                TD_OPEN, array_sum($fridayAmount), TD_CLOSE,
-                TD_OPEN, array_sum($saturdayAmount), TD_CLOSE,
-                TD_OPEN, array_sum($sundayAmount), TD_CLOSE,
+                TD_TODAY, array_sum($todayAmount), CURRENCY, TD_CLOSE, 
+                TD_YESTERDAY, array_sum($yesterdayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($mondayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($tuesdayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($wednesdayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($thursdayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($fridayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($saturdayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($sundayAmount), CURRENCY, TD_CLOSE,
                 TD_OPEN, TD_CLOSE, //For Person Total Column
             TR_CLOSE;
         }
