@@ -7,6 +7,8 @@
     const BR_TAG = '<br>';
     const TOTAL_OPEN = '<b>';
     const TOTAL_CLOSE = '</b>';
+    const DIV_OPEN = '<div>';
+    const DIV_CLOSE = '</div>';
 
     class WeeklyBillSplitController{
         //Add New Person
@@ -131,14 +133,14 @@
                         ';
                     }
                     echo TD_OPEN, $row['name'], TD_CLOSE,
-                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, $this -> findIndividualWeekTotal($row), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), TD_CLOSE,
                     TR_CLOSE;
                 }
             }

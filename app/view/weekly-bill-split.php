@@ -24,16 +24,16 @@
     <?php
         if(isset($weeklyBillSplitController->getBook($conn2)['book-name'])){
     ?>
-    <button  title="Add New Person" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewPersonModal">
+    <button  title="Add New Person" type="button" class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#addNewPersonModal">
         <i class="bi bi-person-plus-fill"></i>
     </button>
-    <button type="button" title="Add New Bill "class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBillModal">
+    <button type="button" title="Add New Bill "class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#addBillModal">
         <i class="bi bi-plus-circle"></i>
     </button>
-    <button type="button"  title="Add New Bill to All" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMultipleBillModal">
+    <button type="button"  title="Add New Bill to All" class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#addMultipleBillModal">
         <i class="bi bi-plus-lg"></i><i class="bi bi-people-fill"></i>
     </button>
-    <div class="btn-group">
+    <div class="btn-group mt-2">
         <button class="btn btn-primary dropdown-toggle" type="button" id="moreDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
             More
         </button>
@@ -49,7 +49,7 @@
     ?>
     <?php
     if ($isEditMode) {
-        echo '<a class = "btn btn-danger" href="/weekly-bill-split"> Exit Edit Mode </a>';
+        echo '<a class = "btn btn-danger mt-2" href="/weekly-bill-split"> Exit Edit Mode </a>';
     }
     ?>
     <?php if($displayReloadMessage) {
@@ -65,8 +65,8 @@
     }?>
 
     <?php if(!$displayReloadMessage) { ?>
-    <table class="table table-borderless" id="weeklyBillSplitTable">
-        <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p>Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
+    <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p class="mt-3">Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
+    <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%" >
         <thead>
             <tr>
                 <?php
