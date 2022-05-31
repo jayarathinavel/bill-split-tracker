@@ -36,6 +36,96 @@
             return $result;
         }
 
+        //To get and render the data for HTML
+        function getDatas($conn, $conn2){
+            $bookId = $this->getBook($conn2)['book-id'];
+            $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
+            $result = $conn->query($sql);
+            $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
+            $today = strtolower(date('l')).'-amount';
+            $yesterday = strtolower(date('l',strtotime("-1 days"))).'-amount';
+            if ($result->num_rows>0) {
+                while ($row = $result->fetch_assoc()) {
+                    $id = $row['id'];
+                    echo TR_OPEN;
+                    if($isEditMode) {
+                        echo '
+                        <td>
+                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" >
+                                <input type="hidden" name="personForDeleting" value="'.$id.'">
+                                <button class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i> </button>
+                            </form>
+                        </td>
+                        ';
+                    }
+                    echo TD_OPEN, $row['name'], TD_CLOSE,
+                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, TD_CLOSE,
+                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, TD_CLOSE,
+
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), TD_CLOSE,
+                    TR_CLOSE;
+                }
+            }
+            else{
+                echo TR_OPEN, '<td colspan="8">'. '<p class="text-center mt-3"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
+            }
+        }
+
+        //To delete a person from the book
+        function deleteSinglePerson($conn, $conn2){
+            if(!empty($_POST["personForDeleting"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
+                $bookId = $this->getBook($conn2)['book-id'];
+                $person = trim($_POST["personForDeleting"]);
+                $sql = "DELETE FROM `weekly-bill-split` WHERE `id` = '$person' AND `book-id` = '$bookId'";
+                $result =  $conn->query($sql);
+                if($result){
+                    echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split?query=editMode"/>';
+                }
+            }
+        }
+
+        //To create new book
+        function createNewBook($conn, $conn2){
+            if(!empty($_POST["bookName"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
+                $bookName = trim($_POST["bookName"]);
+                $user = $_SESSION["username"];
+                //To Deselect old book
+                {
+                    $currentBookId = $this -> getBook($conn2)['book-id'];
+                    $sqlToDeselectOldBook = "UPDATE `books` SET `is_selected_book` = null WHERE `book-id` = '$currentBookId'";
+                    $conn->query($sqlToDeselectOldBook);
+                }
+                $sql = "INSERT into `books` (`book-name`, `user`, is_selected_book) VALUES ('$bookName', '$user', 1)";
+                $result = $conn->query($sql);
+                $conn->close();
+            }
+            return $result;
+        }
+        
+        //To change the book
+        function changeBook($conn, $conn2){
+            if(!empty($_POST["bookIdToChange"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
+                $bookToChange = trim($_POST["bookIdToChange"]);
+                $currentBookId = $this -> getBook($conn2)['book-id'];
+                $sqlToDeselectOldBook = "UPDATE `books` SET `is_selected_book` = null WHERE `book-id` = '$currentBookId'";
+                $isOldBookDeselected = $conn->query($sqlToDeselectOldBook);
+                if($isOldBookDeselected){
+                    $sql = "UPDATE `books` SET `is_selected_book` = 1 WHERE `book-id` = '$bookToChange'";
+                    $result = $conn->query($sql);
+                    $conn->close();
+                }
+            }
+            return $result;
+        }
+
+        //Sub methods goes below
         function insertNewPersonToDatabase($weeklyBillSplitModel, $conn, $conn2){
             $weeklyBillSplitModel -> setName(trim($_POST["name"]));
             $bookId = $this->getBook($conn2)['book-id'];
@@ -114,47 +204,6 @@
                 $conn->close();
             }
             return $result;                        
-        }
-
-        function getDatas($conn, $conn2){
-            $bookId = $this->getBook($conn2)['book-id'];
-            $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
-            $result = $conn->query($sql);
-            $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
-            $today = strtolower(date('l')).'-amount';
-            $yesterday = strtolower(date('l',strtotime("-1 days"))).'-amount';
-            if ($result->num_rows>0) {
-                while ($row = $result->fetch_assoc()) {
-                    $id = $row['id'];
-                    echo TR_OPEN;
-                    if($isEditMode) {
-                        echo '
-                        <td>
-                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" >
-                                <input type="hidden" name="personForDeleting" value="'.$id.'">
-                                <button class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i> </button>
-                            </form>
-                        </td>
-                        ';
-                    }
-                    echo TD_OPEN, $row['name'], TD_CLOSE,
-                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, TD_CLOSE,
-                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, TD_CLOSE,
-
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), TD_CLOSE,
-                    TR_CLOSE;
-                }
-            }
-            else{
-                echo TR_OPEN, '<td colspan="8">'. '<p class="text-center mt-3"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
-            }
         }
 
         function removeSymbolsAndFormatData($data){
@@ -257,17 +306,7 @@
             }
         }
 
-        function deleteSinglePerson($conn, $conn2){
-            if(!empty($_POST["personForDeleting"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
-                $bookId = $this->getBook($conn2)['book-id'];
-                $person = trim($_POST["personForDeleting"]);
-                $sql = "DELETE FROM `weekly-bill-split` WHERE `id` = '$person' AND `book-id` = '$bookId'";
-                $result =  $conn->query($sql);
-                if($result){
-                    echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split?query=editMode"/>';
-                }
-            }
-        }
+        
 
         function getBook($conn2){
             $user =  $_SESSION["username"];
@@ -275,38 +314,6 @@
             $result = $conn2->query($sql);
             $row = $result->fetch_assoc();
             return $row;
-        }
-
-        function createNewBook($conn, $conn2){
-            if(!empty($_POST["bookName"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
-                $bookName = trim($_POST["bookName"]);
-                $user = $_SESSION["username"];
-                //To Deselect old book
-                {
-                    $currentBookId = $this -> getBook($conn2)['book-id'];
-                    $sqlToDeselectOldBook = "UPDATE `books` SET `is_selected_book` = null WHERE `book-id` = '$currentBookId'";
-                    $conn->query($sqlToDeselectOldBook);
-                }
-                $sql = "INSERT into `books` (`book-name`, `user`, is_selected_book) VALUES ('$bookName', '$user', 1)";
-                $result = $conn->query($sql);
-                $conn->close();
-            }
-            return $result;
-        }
-
-        function changeBook($conn, $conn2){
-            if(!empty($_POST["bookIdToChange"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
-                $bookToChange = trim($_POST["bookIdToChange"]);
-                $currentBookId = $this -> getBook($conn2)['book-id'];
-                $sqlToDeselectOldBook = "UPDATE `books` SET `is_selected_book` = null WHERE `book-id` = '$currentBookId'";
-                $isOldBookDeselected = $conn->query($sqlToDeselectOldBook);
-                if($isOldBookDeselected){
-                    $sql = "UPDATE `books` SET `is_selected_book` = 1 WHERE `book-id` = '$bookToChange'";
-                    $result = $conn->query($sql);
-                    $conn->close();
-                }
-            }
-            return $result;
         }
 
         function showListOfBooksInSelect($conn, $conn2){
