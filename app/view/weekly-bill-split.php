@@ -65,7 +65,7 @@
     }?>
     <?php if(!$displayReloadMessage) { ?>
     <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p class="mt-3">Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
-    <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%" >
+    <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%; display : none;" >
         <thead>
             <tr>
                 <?php

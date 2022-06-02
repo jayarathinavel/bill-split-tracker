@@ -34,4 +34,5 @@ $(document).ready(function () {
         },        
         responsive: true,
     });
+    $('#weeklyBillSplitTable').show();
 });
