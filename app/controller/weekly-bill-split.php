@@ -9,8 +9,8 @@
     const TOTAL_CLOSE = '</b>';
     const DIV_OPEN = '<div>';
     const DIV_CLOSE = '</div>';
-    const TD_YESTERDAY = '<td id="yesterday">';
-    const TD_TODAY = '<td id="today">';
+    const TD_YESTERDAY = '<td class="yesterday">';
+    const TD_TODAY = '<td class="today">';
     const CURRENCY = ' ₹';
 
 

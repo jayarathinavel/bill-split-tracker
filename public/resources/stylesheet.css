@@ -38,7 +38,11 @@ footer {
     min-height: 350px;
 }
 
-#todayAndYesterday{
+.today {
+    display: none;
+}
+
+.yesterday{
     display: none;
 }
 
@@ -49,4 +53,10 @@ footer {
 td{
     text-align: center;
     vertical-align: middle;
+}
+
+@media screen and (max-width: 500px) {
+    .today, .yesterday  {
+        display:table-cell !important;
+    }
 }
