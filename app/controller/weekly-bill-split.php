@@ -48,6 +48,7 @@
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
                     $id = $row['id'];
+                    $individualRecordEditButton = $isEditMode ? '<br><a class="ml-1 text-danger" href="/weekly-bill-split?query=editMode&id='.$id.'&day=#day"> <i class="bi bi-pencil-square"></i></a>' : '';
                     echo TR_OPEN;
                     if($isEditMode) {
                         echo '
@@ -64,13 +65,13 @@
                     TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, TD_CLOSE,
                     TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, TD_CLOSE,
 
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, str_replace("#day", "monday-amount", $individualRecordEditButton), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, str_replace("#day", "tuesday-amount", $individualRecordEditButton), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, str_replace("#day", "wednesday-amount", $individualRecordEditButton), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, str_replace("#day", "thursday-amount", $individualRecordEditButton), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, str_replace("#day", "friday-amount", $individualRecordEditButton), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, str_replace("#day", "saturday-amount", $individualRecordEditButton), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, str_replace("#day", "sunday-amount", $individualRecordEditButton), TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), CURRENCY, TD_CLOSE,
                     TR_CLOSE;
                 }
@@ -311,9 +312,7 @@
                     ';
                 }
             }
-        }
-
-        
+        }        
 
         function getBook($conn2){
             $user =  $_SESSION["username"];
@@ -351,10 +350,53 @@
                     </form>
                 ';
             }
+            $this -> executeEditPerson($id, $conn, $conn2);
+        }
+
+        function executeEditPerson($id, $conn, $conn2){
             if(isset($_POST['EditPerson'])){
                 $bookId = $this -> getBook($conn2)['book-id'];
                 $personName = $_POST['personNameForEdit'];
                 $sql = "UPDATE `weekly-bill-split` SET `name` = '$personName' WHERE `book-id` = '$bookId' AND `id` = '$id'";
+                $updateResult = $conn->query($sql);
+            }
+            return $updateResult;
+        }
+
+        function renderEditFormForIndividualAmounts($id, $conn, $conn2){
+            $sql = "SELECT * FROM `weekly-bill-split` WHERE id = '$id' ";
+            $result = $conn2->query($sql);
+            $row = $result->fetch_assoc();
+            $isEditFormDisplayedForIndividualAmounts = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']) && isset($_GET['day']);
+            if($isEditFormDisplayedForIndividualAmounts){
+                echo '
+                    <form action = "" method = "POST">
+                    <span>Name</span><input type = "text" name="personNameForEdit" value="'.$row['name'].'"><br>
+                    <span>Monday </span><input type = "text" name = "monday-amount" value="'.$row['monday-amount'].'"><br>
+                    <span>Tuesday </span><input type = "text" name = "tuesday-amount" value="'.$row['tuesday-amount'].'"><br>
+                    <span>Wednesday </span><input type = "text" name = "wednesday-amount" value="'.$row['wednesday-amount'].'"><br>
+                    <span>Thursday </span><input type = "text" name = "thursday-amount" value="'.$row['thursday-amount'].'"><br>
+                    <span>Friday </span><input type = "text" name = "friday-amount" value="'.$row['friday-amount'].'"><br>
+                    <span>Saturday </span><input type = "text" name = "saturday-amount" value="'.$row['saturday-amount'].'"><br>
+                    <span>Sunay </span><input type = "text" name = "sunday-amount" value="'.$row['sunday-amount'].'"><br>
+                    <input type = "submit" name="EditIndividual" value = "Edit">
+                    </form>
+                ';
+            }
+            $this -> executeEditForIndividualAmounts($id, $conn, $conn2);
+        }
+
+        function executeEditForIndividualAmounts($id, $conn, $conn2){
+            if(isset($_POST['EditIndividual'])){
+                $personName = $_POST['personNameForEdit'];
+                $mondayAmount = $_POST['monday-amount'];
+                $tuesdayAmount = $_POST['tuesday-amount'];
+                $wednesdayAmount = $_POST['wednesday-amount'];
+                $thursdayAmount = $_POST['thursday-amount'];
+                $fridayAmount = $_POST['friday-amount'];
+                $saturdayAmount = $_POST['saturday-amount'];
+                $sundayAmount = $_POST['sunday-amount'];
+                $sql = "UPDATE `weekly-bill-split` SET `name` = '$personName', `monday-amount` = '$mondayAmount',`tuesday-amount` = '$tuesdayAmount', `wednesday-amount` = '$wednesdayAmount', `thursday-amount` = '$thursdayAmount',`friday-amount` = '$fridayAmount', `saturday-amount` = '$saturdayAmount', `sunday-amount` = '$sundayAmount'  WHERE `id` = '$id'";
                 $updateResult = $conn->query($sql);
             }
             return $updateResult;

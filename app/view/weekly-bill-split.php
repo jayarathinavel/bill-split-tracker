@@ -4,8 +4,10 @@
     $functions -> loginRequired('weekly-bill-split');
     $weeklyBillSplitController = new WeeklyBillSplitController;
     $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
-    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2) || $weeklyBillSplitController -> renderEditFormForPersonName($id, $conn, $conn2) || $weeklyBillSplitController -> deleteSinglePerson($conn, $conn2);
-    $isEditFormDisplayed = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']);
+    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2) || $weeklyBillSplitController -> executeEditPerson($id, $conn, $conn2) || $weeklyBillSplitController -> deleteSinglePerson($conn, $conn2) ||  $weeklyBillSplitController -> executeEditForIndividualAmounts($id, $conn, $conn2);
+    $isEditFormDisplayed = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id'])  && !isset($_GET['day']);
+    $isEditFormDisplayedForIndividualAmounts = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']) && isset($_GET['day']);
+
 ?>
 
 <head>
@@ -52,12 +54,19 @@
     if ($isEditMode) {
         echo '<a class = "btn btn-danger mt-2" href="/weekly-bill-split"> Exit Edit Mode </a>';
     }
-    if ($isEditFormDisplayed) { ?>
+    if ($isEditFormDisplayed || $isEditFormDisplayedForIndividualAmounts) { ?>
         <div class="editSection alignCenter mt-3">
             <div class="card" style="width: 50rem;">
             <div class="card-body">
                 <h5 class="card-title">Edit</h5>
-                <?php $weeklyBillSplitController->renderEditFormForPersonName($_GET['id'], $conn, $conn2) ?>
+                <?php
+                    if($isEditFormDisplayed && !$isEditFormDisplayedForIndividualAmounts){
+                        $weeklyBillSplitController->renderEditFormForPersonName($_GET['id'], $conn, $conn2);
+                    }
+                    elseif(!$isEditFormDisplayed && $isEditFormDisplayedForIndividualAmounts){
+                        $weeklyBillSplitController->renderEditFormForIndividualAmounts($_GET['id'], $conn, $conn2);
+                    }
+                ?>
             </div>
             </div>
         </div>
@@ -75,7 +84,7 @@
     }?>
     <?php if(!$displayReloadMessage) { ?>
     <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p class="mt-3">Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
-    <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%; display : none;" >
+    <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable">
         <thead>
             <tr>
                 <?php
