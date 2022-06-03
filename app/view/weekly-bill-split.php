@@ -4,7 +4,8 @@
     $functions -> loginRequired('weekly-bill-split');
     $weeklyBillSplitController = new WeeklyBillSplitController;
     $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
-    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2);
+    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2) || $weeklyBillSplitController -> renderEditFormForPersonName($id, $conn, $conn2) || $weeklyBillSplitController -> deleteSinglePerson($conn, $conn2);
+    $isEditFormDisplayed = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']);
 ?>
 
 <head>
@@ -51,7 +52,16 @@
     if ($isEditMode) {
         echo '<a class = "btn btn-danger mt-2" href="/weekly-bill-split"> Exit Edit Mode </a>';
     }
-    ?>
+    if ($isEditFormDisplayed) { ?>
+        <div class="editSection alignCenter mt-3">
+            <div class="card" style="width: 50rem;">
+            <div class="card-body">
+                <h5 class="card-title">Edit</h5>
+                <?php $weeklyBillSplitController->renderEditFormForPersonName($_GET['id'], $conn, $conn2) ?>
+            </div>
+            </div>
+        </div>
+    <?php } ?>
     <?php if($displayReloadMessage) {
         echo '
         <div class="alignCenter">

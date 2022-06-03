@@ -41,7 +41,7 @@
         function getDatas($conn, $conn2){
             $bookId = $this->getBook($conn2)['book-id'];
             $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
-            $result = $conn->query($sql);
+            $result = $conn2->query($sql);
             $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
             $today = strtolower(date('l')).'-amount';
             $yesterday = strtolower(date('l',strtotime("-1 days"))).'-amount';
@@ -52,10 +52,11 @@
                     if($isEditMode) {
                         echo '
                         <td>
-                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" >
+                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" class="displayInline">
                                 <input type="hidden" name="personForDeleting" value="'.$id.'">
-                                <button class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i> </button>
+                                <button class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i></button>
                             </form>
+                            <a class="btn btn-sm btn-danger ml-1" href="/weekly-bill-split?query=editMode&id='.$id.'"> <i class="bi bi-pencil-square"></i></a>
                         </td>
                         ';
                     }
@@ -86,10 +87,8 @@
                 $person = trim($_POST["personForDeleting"]);
                 $sql = "DELETE FROM `weekly-bill-split` WHERE `id` = '$person' AND `book-id` = '$bookId'";
                 $result =  $conn->query($sql);
-                if($result){
-                    echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split?query=editMode"/>';
-                }
             }
+            return $result;
         }
 
         //To create new book
@@ -176,7 +175,7 @@
             $day = trim($_POST["day"]).'-amount';
             $bookId = $this->getBook($conn2)['book-id'];
             $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
-            $result = $conn->query($existingRecordSql)->fetch_assoc();
+            $result = $conn2->query($existingRecordSql)->fetch_assoc();
             $existingRecord = $result[$day];
             $newRecord = trim($_POST["billName"]) .':'. trim($_POST["amount"]) .'; ';
             $modifiedRecord = $existingRecord . $newRecord;
@@ -189,13 +188,13 @@
         function insertNewMultiplePersonBillToDatabase($conn, $conn2){
             $bookId = $this->getBook($conn2)['book-id'];
             $sqlToSelectNames = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
-            $names = $conn->query($sqlToSelectNames);
+            $names = $conn2->query($sqlToSelectNames);
             if ($names->num_rows>0) {
                 while ($row = $names->fetch_assoc()) {
                     $personName = $row['name'];
                     $day = trim($_POST["day"]).'-amount';
                     $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
-                    $result = $conn->query($existingRecordSql)->fetch_assoc();
+                    $result = $conn2->query($existingRecordSql)->fetch_assoc();
                     $existingRecord = $result[$day];
                     $newRecord = trim($_POST["billName"]) .':'. trim($_POST["amount-for-$personName"]) .'; ';
                     $modifiedRecord = $existingRecord . $newRecord;
@@ -208,7 +207,7 @@
         }
 
         function removeSymbolsAndFormatData($data){
-            $data = str_replace(':', ' - ', $data);
+            $data = str_replace(':', ' : ', $data);
             $data = str_replace(';','<br>', $data);
             return $data; 
         }
@@ -243,7 +242,7 @@
         function findAndRenderDayTotal($conn, $conn2){
             $bookId = $this->getBook($conn2)['book-id'];
             $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
-            $result = $conn->query($sql);
+            $result = $conn2->query($sql);
             $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
             $today = strtolower(date('l')).'-amount';
             $yesterday = strtolower(date('l',strtotime("-1 days"))).'-amount';
@@ -290,7 +289,7 @@
         function getPersonNamesInSelectOptions($conn, $conn2){
             $bookId = $this -> getBook($conn2)['book-id'];
             $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
-            $result = $conn->query($sql);
+            $result = $conn2->query($sql);
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '<option value = "'.$row['name'].'">'.
@@ -303,7 +302,7 @@
         function getPersonNamesInDisabledInput($conn, $conn2){
             $bookId = $this -> getBook($conn2)['book-id'];
             $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
-            $result = $conn->query($sql);
+            $result = $conn2->query($sql);
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '
@@ -328,7 +327,7 @@
             $user =  $_SESSION["username"];
             $currentBookId = $this -> getBook($conn2)['book-id'];
             $sql = "SELECT `book-name`, `book-id` FROM `books` WHERE user = '$user'";
-            $result = $conn->query($sql);
+            $result = $conn2->query($sql);
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
                     $selected = $row['book-id'] == $currentBookId ? ' selected' : '';
@@ -337,6 +336,28 @@
                     '</option>';
                 }
             }
+        }
+
+        function renderEditFormForPersonName($id, $conn, $conn2){
+            $sql = "SELECT `name` FROM `weekly-bill-split` WHERE id = '$id' ";
+            $result = $conn2->query($sql);
+            $row = $result->fetch_assoc();
+            $isEditFormDisplayed = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']);
+            if($isEditFormDisplayed){
+                echo '
+                    <form action = "" method = "POST">
+                        <input type = "text" name="personNameForEdit" value="'.$row['name'].'">
+                        <input type = "submit" name="EditPerson" value = "Edit">
+                    </form>
+                ';
+            }
+            if(isset($_POST['EditPerson'])){
+                $bookId = $this -> getBook($conn2)['book-id'];
+                $personName = $_POST['personNameForEdit'];
+                $sql = "UPDATE `weekly-bill-split` SET `name` = '$personName' WHERE `book-id` = '$bookId' AND `id` = '$id'";
+                $updateResult = $conn->query($sql);
+            }
+            return $updateResult;
         }
     }
 ?>
