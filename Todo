@@ -1,0 +1,20 @@
+Delete Book
+Edit Option
+
+Multiple Delete
+
+Form validation
+
+Bin Feature
+Logs/History Recording
+
+    Bugs
+    Clicking button mutliple times -> inserts multiple data
+
+SET Global timezone : https://www.php.net/manual/en/function.date-default-timezone-set.php
+
+
+Adding empty record should not append semicolon
+
+append week number and date in book creation
+    use tags to display week and date in next line, small, light txt
