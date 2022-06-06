@@ -1,4 +1,6 @@
 <?php
+    $title = 'Weekly Bill Split Tracker';
+
     class WeeklyBillSplitModel {
         private $bookId;
         private $name;

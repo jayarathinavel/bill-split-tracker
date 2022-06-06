@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title><?php echo isset($title) ?  $title : $constants['APP_TITLE']; ?></title>
     <link rel="icon" type="image/x-icon" href="resources/favicon.png">
     <link href="resources/stylesheet.css" rel="stylesheet">
@@ -31,7 +31,7 @@
     <div class="layout-container">
         <nav class="<?php echo isset($classes['navbar']) ? $classes['navbar'] : 'navbar fixed-top navbar-expand-lg navbar-dark bg-dark';?>">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/home">Brand</a>
+                <a class="navbar-brand" href="/home">Bill Split Tracker</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -41,7 +41,7 @@
                             <a href="weekly-bill-split" class="nav-link <?php echo $page == '/weekly-bill-split' ? 'active' : ''; ?> <?php echo isset($classes['navbar-btn']) ? $classes['navbar-btn'] : 'btn btn-sm btn-secondary';?>"> Weekly Bill Split </a>
                         </li>
                         <li class="nav-item m-1">
-                            <a href="test2" class="nav-link <?php echo $page == '/test2' ? 'active' : ''; ?> <?php echo isset($classes['navbar-btn']) ? $classes['navbar-btn'] : 'btn btn-sm btn-secondary';?>"> Test Page 2 </a>
+                            <a href="more" class="nav-link <?php echo $page == '/more' ? 'active' : ''; ?> <?php echo isset($classes['navbar-btn']) ? $classes['navbar-btn'] : 'btn btn-sm btn-secondary';?>"> More </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -91,11 +91,6 @@
                 include $mainContent;
                 ?>
         </section>
-        <footer>
-            <div class="<?php echo $footerClass; ?>">
-                Footer
-            </div>
-        </footer>
     </div>
     <script src="resources/script.js"></script>
     <!-- For Datatables -->

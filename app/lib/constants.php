@@ -1,5 +1,5 @@
 <?php
     $constants = [
-        'APP_TITLE' => 'PHP-BoilerPlate',
+        'APP_TITLE' => 'Bill Split Tracker',
     ]
 ?>

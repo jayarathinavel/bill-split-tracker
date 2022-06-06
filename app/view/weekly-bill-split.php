@@ -11,10 +11,10 @@
 ?>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <!-- <meta charset="UTF-8"> -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Weekly Bill Split Tracker</title>
     <script>
         //For avoidinf Confirm Form Submission on reload
         if (window.history.replaceState) {
@@ -84,7 +84,7 @@
     }?>
     <?php if(!$displayReloadMessage) { ?>
     <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p class="mt-3">Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
-    <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%">
+    <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%;">
         <thead>
             <tr>
                 <?php
@@ -151,9 +151,9 @@
                 </div>
                 <div class="modal-body">
                     <form action="<?php $weeklyBillSplitController->insertNewPerson($weeklyBillSplitModel, $conn, $conn2); ?>" method="POST">
-                        <input type="text" name="name" placeholder="Name of the Person"><br>
-                        <input type="text" name="billName" placeholder="Name of the Bill"><br>
-                        <select name="day">
+                        <input type="text" class="form-control mb-2" name="name" placeholder="Name of the Person">
+                        <input type="text" class="form-control mb-2" name="billName" placeholder="Name of the Bill">
+                        <select name="day" class="form-select mb-2">
                             <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
                             <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
                             <option value="wednesday" <?php echo strtolower(date('l')) == 'wednesday' ? 'selected' : '';?> >Wednesday</option>
@@ -162,12 +162,9 @@
                             <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
                             <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
                         </select>
-                        <input type="text" name="amount" placeholder="Amount"><br>
-                        <input type="submit" class="btn btn-success" value="Add">
+                        <input type="number" class="form-control mb-2" name="amount" placeholder="Amount">
+                        <input type="submit" class="btn btn-success float-end" value="Add">
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -183,11 +180,11 @@
                 </div>
                 <div class="modal-body">
                     <form action="<?php $weeklyBillSplitController->insertNewBill($conn, $conn2); ?>" method="POST">
-                        <select name="personName">
+                        <select name="personName" class="form-select mb-2">
                             <?php $weeklyBillSplitController->getPersonNamesInSelectOptions($conn, $conn2); ?>
                         </select>
-                        <input type="text" name="billName" placeholder="Name of the Bill"><br>
-                        <select name="day">
+                        <input type="text" class="form-control mb-2" name="billName" placeholder="Name of the Bill">
+                        <select name="day" class="form-select mb-2">
                         <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
                             <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
                             <option value="wednesday" <?php echo strtolower(date('l')) == 'wednesday' ? 'selected' : '';?> >Wednesday</option>
@@ -196,12 +193,9 @@
                             <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
                             <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
                         </select>
-                        <input type="text" name="amount" placeholder="Amount"><br>
-                        <input type="submit" class="btn btn-success" value="Add">
+                        <input type="number" class="form-control mb-2" name="amount" placeholder="Amount">
+                        <input type="submit" class="btn btn-success float-end" value="Add">
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -217,8 +211,8 @@
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="<?php $weeklyBillSplitController->insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) ?>">
-                        <input type="text" name="billName" placeholder="Bill Name" /> <br>
-                        <select name="day">
+                        <input type="text" class="form-control mb-2" name="billName" placeholder="Bill Name" />
+                        <select name="day" class="form-select mb-2">
                         <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
                             <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
                             <option value="wednesday" <?php echo strtolower(date('l')) == 'wednesday' ? 'selected' : '';?> >Wednesday</option>
@@ -226,13 +220,10 @@
                             <option value="friday" <?php echo strtolower(date('l')) == 'friday' ? 'selected' : '';?> >Friday</option>
                             <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
                             <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
-                        </select> <br>
+                        </select>
                         <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn, $conn2); ?>
-                        <input type="submit" class="btn btn-success" value="Add">
+                        <input type="submit" class="btn btn-success float-end" value="Add">
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -248,12 +239,9 @@
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="<?php $weeklyBillSplitController->createNewBook($conn, $conn2) ?>">
-                        <input type="text" name="bookName" placeholder="Book Name" /> <br>
-                        <input type="submit" class="btn btn-success" value="Add">
+                        <input type="text" class="form-control mb-2" name="bookName" placeholder="Book Name" />
+                        <input type="submit" class="btn btn-success float-end" value="Create">
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -269,14 +257,11 @@
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="<?php $weeklyBillSplitController->changeBook($conn, $conn2) ?>">
-                        <select name = "bookIdToChange">
+                        <select name = "bookIdToChange" class="form-select mb-2">
                             <?php $weeklyBillSplitController->showListOfBooksInSelect($conn, $conn2); ?>
                         </select>
-                        <input type="submit" class="btn btn-success" value="Change">
+                        <input type="submit" class="btn btn-success float-end" value="Change">
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

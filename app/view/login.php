@@ -23,7 +23,7 @@
             $isLoggedIn = $_GET['loggedIn'];
             if($isLoggedIn == 'no'){
                 echo '
-                <div class="alert alert-danger text-center">You must login to continue</div>
+                <div class="alert alert-warning text-center">Please login to continue</div>
                 ';  
             }
             ?>

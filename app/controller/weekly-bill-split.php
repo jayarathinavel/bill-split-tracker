@@ -53,11 +53,11 @@
                     if($isEditMode) {
                         echo '
                         <td>
-                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST" class="displayInline">
+                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST">
                                 <input type="hidden" name="personForDeleting" value="'.$id.'">
                                 <button class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i></button>
                             </form>
-                            <a class="btn btn-sm btn-danger ml-1" href="/weekly-bill-split?query=editMode&id='.$id.'"> <i class="bi bi-pencil-square"></i></a>
+                            <a class="btn btn-sm btn-danger mt-1" href="/weekly-bill-split?query=editMode&id='.$id.'"> <i class="bi bi-pencil-square"></i></a>
                         </td>
                         ';
                     }
@@ -307,8 +307,8 @@
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '
-                        <span>'.$row['name'].'</span>
-                        <input type="number" name = "amount-for-'.$row['name'].'" placeholder="Amount" /> <br>
+                        <label for="'.$row['id'].'" class="form-label">'.$row['name'].'</label>
+                        <input type="number" class="form-control mb-2" name = "amount-for-'.$row['name'].'" placeholder="Amount" id="'.$row['id'].'" />
                     ';
                 }
             }
@@ -345,8 +345,8 @@
             if($isEditFormDisplayed){
                 echo '
                     <form action = "" method = "POST">
-                        <input type = "text" name="personNameForEdit" value="'.$row['name'].'">
-                        <input type = "submit" name="EditPerson" value = "Edit">
+                        <input type = "text" class="form-control mb-2" name="personNameForEdit" value="'.$row['name'].'">
+                        <input type = "submit" name="EditPerson" class="btn btn-success float-end" value = "Edit">
                     </form>
                 ';
             }
@@ -371,15 +371,16 @@
             if($isEditFormDisplayedForIndividualAmounts){
                 echo '
                     <form action = "" method = "POST">
-                    <span>Name</span><input type = "text" name="personNameForEdit" value="'.$row['name'].'"><br>
-                    <span>Monday </span><input type = "text" name = "monday-amount" value="'.$row['monday-amount'].'"><br>
-                    <span>Tuesday </span><input type = "text" name = "tuesday-amount" value="'.$row['tuesday-amount'].'"><br>
-                    <span>Wednesday </span><input type = "text" name = "wednesday-amount" value="'.$row['wednesday-amount'].'"><br>
-                    <span>Thursday </span><input type = "text" name = "thursday-amount" value="'.$row['thursday-amount'].'"><br>
-                    <span>Friday </span><input type = "text" name = "friday-amount" value="'.$row['friday-amount'].'"><br>
-                    <span>Saturday </span><input type = "text" name = "saturday-amount" value="'.$row['saturday-amount'].'"><br>
-                    <span>Sunay </span><input type = "text" name = "sunday-amount" value="'.$row['sunday-amount'].'"><br>
-                    <input type = "submit" name="EditIndividual" value = "Edit">
+                    <p class="text-muted"> ** Please maintain the Comma Seperated Format ** </p>
+                    <span>Name</span><input type = "text" class="form-control mb-2" name="personNameForEdit" value="'.$row['name'].'">
+                    <span>Monday </span><input type = "text" class="form-control mb-2" name = "monday-amount" value="'.$row['monday-amount'].'">
+                    <span>Tuesday </span><input type = "text" class="form-control mb-2" name = "tuesday-amount" value="'.$row['tuesday-amount'].'">
+                    <span>Wednesday </span><input type = "text" class="form-control mb-2" name = "wednesday-amount" value="'.$row['wednesday-amount'].'">
+                    <span>Thursday </span><input type = "text" class="form-control mb-2" name = "thursday-amount" value="'.$row['thursday-amount'].'">
+                    <span>Friday </span><input type = "text" class="form-control mb-2" name = "friday-amount" value="'.$row['friday-amount'].'">
+                    <span>Saturday </span><input type = "text" class="form-control mb-2" name = "saturday-amount" value="'.$row['saturday-amount'].'">
+                    <span>Sunay </span><input type = "text" class="form-control mb-2" name = "sunday-amount" value="'.$row['sunday-amount'].'">
+                    <input type = "submit" class="btn btn-success float-end" name="EditIndividual" value = "Edit">
                     </form>
                 ';
             }

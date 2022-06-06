@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title><?php echo $constants['APP_TITLE']; ?></title>
-  </head>
-  <body>
-    <?php
-      helloWorld();
-      echo ' And this is from Model : '.$title;
-    ?>
-    <br>
-    <?php echo 'A value from Variables.php : '. $variables['variableTest']; ?>
-    <br>
-    <a href="home?query=Hello"> Query String from URL </a>
-    <?php echo isset($_GET['query']) ? 'The query string from URL is : ' . $_GET['query'] : ''; ?>
-  </body>
-</html>
+<?php
+if($functions -> isLoggedIn() === false){
+  echo '
+    <div class="container bg-light">
+        <div class="col-md-12 text-center">
+            <a type="button" href="/login" class="btn btn-primary">Login</a>
+        </div>
+    </div>';
+  }
+?>
+<div class="alignCenter mb-3">
+  <img src="/resources/memes/<?php echo rand(1,11)?>.jpg" alt="Meme" style="max-width:70%; border-radius : 5px;" /> 
+</div>
+<ul class="list-group">
+  <li class="list-group-item"><a href="/weekly-bill-split" class="text-decoration-none"> Weekly Bill Split </a></li>
+  <li class="list-group-item"><a href="/dashboard" class="text-decoration-none"> Dashboard </a></li>
+</ul>
