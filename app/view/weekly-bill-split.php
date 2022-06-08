@@ -221,8 +221,18 @@
                             <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
                             <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
                         </select>
+                        <p class="fw-bold text-center">Split Equally</p>
+                        <div class="input-group mb-3">
+                            <input type="number" class="form-control" id="splitEqualField" placeholder="Amount" aria-label="Amount" aria-describedby="splitEqual">
+                            <button class="btn btn-primary" type="button" id="splitEqual" onclick="hideInputFieldsInAddBillToAll()">Split Equally</button>
+                        </div>
+                        <p id="individualAmountInAddToAll" class="fw-bold text-center">Individual Amounts</p>
                         <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn, $conn2); ?>
-                        <input type="submit" class="btn btn-success float-end" value="Add">
+                        <div id="amountSplittedEqually" class="text-success fw-bold"></div>
+                        <div id="splitValues" class="fw-bold"></div>
+                        <span class="mt-1 mb-1 me-1"><strong>Total : </strong></span><span id="sumForAddBillToAll">0</span>
+                        <input type="submit" class="btn btn-success float-end ms-1" value="Add"> 
+                        <input type="reset" onclick="showInputFieldsInAddBillToAll()" value="Reset" class="btn btn-danger float-end">
                     </form>
                 </div>
             </div>

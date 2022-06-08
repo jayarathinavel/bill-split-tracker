@@ -35,3 +35,24 @@ $(document).ready(function () {
         responsive: true,
     });
 });
+
+//For Calculating Sum in Add Bill to All
+$(document).ready(function () {
+    $(".inputForAddBillToAll").each(function () {
+        $(this).keyup(function () {
+            calculateSum();
+        });
+    });
+});
+
+function calculateSum() {
+    var sum = 0;
+    $(".inputForAddBillToAll").each(function () {
+        if (!isNaN(this.value) && this.value.length != 0) {
+            sum += parseFloat(this.value);
+        }
+    });
+    $("#sumForAddBillToAll").html(sum.toFixed(2));
+}
+
+//
