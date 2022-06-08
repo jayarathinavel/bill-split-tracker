@@ -7,7 +7,7 @@
     $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2) || $weeklyBillSplitController -> executeEditPerson($id, $conn, $conn2) || $weeklyBillSplitController -> deleteSinglePerson($conn, $conn2) ||  $weeklyBillSplitController -> executeEditForIndividualAmounts($id, $conn, $conn2);
     $isEditFormDisplayed = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id'])  && !isset($_GET['day']);
     $isEditFormDisplayedForIndividualAmounts = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']) && isset($_GET['day']);
-
+    $records = $weeklyBillSplitController -> findRecords($conn, $conn2);
 ?>
 
 <head>
@@ -27,12 +27,14 @@
     <button  title="Add New Person" type="button" class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#addNewPersonModal">
         <i class="bi bi-person-plus-fill"></i>
     </button>
+    <?php if($records != "No Records") { ?>
     <button type="button" title="Add New Bill "class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#addBillModal">
         <i class="bi bi-plus-circle"></i>
     </button>
     <button type="button"  title="Add New Bill to All" class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#addMultipleBillModal">
         <i class="bi bi-plus-lg"></i><i class="bi bi-people-fill"></i>
     </button>
+    <?php } ?>
     <div class="btn-group mt-2">
         <button class="btn btn-primary dropdown-toggle" type="button" id="moreDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
             More

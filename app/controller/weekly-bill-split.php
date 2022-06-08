@@ -76,9 +76,17 @@
                     TR_CLOSE;
                 }
             }
+        }
+
+        function findRecords($conn, $conn2){
+            $bookId = $this->getBook($conn2)['book-id'];
+            $sql = "SELECT * FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
+            $result = $conn2->query($sql);
+            if ($result->num_rows>0) {
+                return $result->num_rows . ' rows found';
+            }
             else{
-                $colspan = $isEditMode ? 10 : 9;
-                echo TR_OPEN, '<td colspan="'.$colspan.'">'. '<p class="text-center mt-3"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
+                return "No Records";
             }
         }
 
