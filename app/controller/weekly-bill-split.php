@@ -197,7 +197,7 @@
                     $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
                     $result = $conn2->query($existingRecordSql)->fetch_assoc();
                     $existingRecord = $result[$day];
-                    $newRecord = trim($_POST["billName"]) .':'. trim($_POST["amount-for-$personName"]) .'; ';
+                    $newRecord = trim($_POST["amount-for-$personName"]) == '' ? '' : trim($_POST["billName"]) .':'. trim($_POST["amount-for-$personName"]) .'; ';
                     $modifiedRecord = $existingRecord . $newRecord;
                     $sql = "UPDATE `weekly-bill-split` SET `$day` = '$modifiedRecord' WHERE `book-id` = '$bookId' AND `name` = '$personName'";
                     $result = $conn->query($sql);
