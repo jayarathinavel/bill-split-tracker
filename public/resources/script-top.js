@@ -52,7 +52,7 @@ function calculateSum() {
             sum += parseFloat(this.value);
         }
     });
-    $("#sumForAddBillToAll").html(sum.toFixed(2));
+    $("#sumForAddBillToAll").html(sum);
 }
 
 //

@@ -11,7 +11,7 @@ function hideInputFieldsInAddBillToAll() {
     $(".labelForAddBillToAll").prop("hidden", true);
     $("#splitEqual").click(function (event) {
         var amount = document.getElementById("splitEqualField").value;
-        $('#sumForAddBillToAll').text(amount);
+        $('#sumForAddBillToAll').text(amount ==''?'0':amount);
         var labels = document.getElementsByClassName("labelForAddBillToAll");
         var inputFields = document.getElementsByClassName("inputForAddBillToAll");
         var splitValues = "";
@@ -29,4 +29,5 @@ function showInputFieldsInAddBillToAll() {
     $("#individualAmountInAddToAll").prop("hidden", false);
     $('#sumForAddBillToAll').text('0');
     $('#amountSplittedEqually').text('');
+    $('#splitValues').html('');
 }

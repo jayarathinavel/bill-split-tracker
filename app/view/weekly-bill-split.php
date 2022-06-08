@@ -229,7 +229,7 @@
                         <p id="individualAmountInAddToAll" class="fw-bold text-center">Individual Amounts</p>
                         <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn, $conn2); ?>
                         <div id="amountSplittedEqually" class="text-success fw-bold"></div>
-                        <div id="splitValues" class="fw-bold"></div>
+                        <div id="splitValues"></div>
                         <span class="mt-1 mb-1 me-1"><strong>Total : </strong></span><span id="sumForAddBillToAll">0</span>
                         <input type="submit" class="btn btn-success float-end ms-1" value="Add"> 
                         <input type="reset" onclick="showInputFieldsInAddBillToAll()" value="Reset" class="btn btn-danger float-end">
