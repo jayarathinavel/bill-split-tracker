@@ -55,9 +55,9 @@
                         <td>
                             <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST">
                                 <input type="hidden" name="personForDeleting" value="'.$id.'">
-                                <button class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i></button>
+                                <button title="Delete Person" class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i></button>
                             </form>
-                            <a class="btn btn-sm btn-danger mt-1" href="/weekly-bill-split?query=editMode&id='.$id.'"> <i class="bi bi-pencil-square"></i></a>
+                            <a title ="Edit Person Name" class="btn btn-sm btn-danger mt-1" href="/weekly-bill-split?query=editMode&id='.$id.'"> <i class="bi bi-pencil-square"></i></a>
                         </td>
                         ';
                     }
@@ -77,7 +77,8 @@
                 }
             }
             else{
-                echo TR_OPEN, '<td colspan="8">'. '<p class="text-center mt-3"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
+                $colspan = $isEditMode ? 10 : 9;
+                echo TR_OPEN, '<td colspan="'.$colspan.'">'. '<p class="text-center mt-3"> No Records Found </p>'. TD_CLOSE, TR_CLOSE;
             }
         }
 
@@ -369,17 +370,12 @@
             $row = $result->fetch_assoc();
             $isEditFormDisplayedForIndividualAmounts = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']) && isset($_GET['day']);
             if($isEditFormDisplayedForIndividualAmounts){
+                $day = $_GET['day'];
                 echo '
                     <form action = "" method = "POST">
                     <p class="text-muted"> ** Please maintain the Comma Seperated Format ** </p>
                     <span>Name</span><input type = "text" class="form-control mb-2" name="personNameForEdit" value="'.$row['name'].'">
-                    <span>Monday </span><input type = "text" class="form-control mb-2" name = "monday-amount" value="'.$row['monday-amount'].'">
-                    <span>Tuesday </span><input type = "text" class="form-control mb-2" name = "tuesday-amount" value="'.$row['tuesday-amount'].'">
-                    <span>Wednesday </span><input type = "text" class="form-control mb-2" name = "wednesday-amount" value="'.$row['wednesday-amount'].'">
-                    <span>Thursday </span><input type = "text" class="form-control mb-2" name = "thursday-amount" value="'.$row['thursday-amount'].'">
-                    <span>Friday </span><input type = "text" class="form-control mb-2" name = "friday-amount" value="'.$row['friday-amount'].'">
-                    <span>Saturday </span><input type = "text" class="form-control mb-2" name = "saturday-amount" value="'.$row['saturday-amount'].'">
-                    <span>Sunay </span><input type = "text" class="form-control mb-2" name = "sunday-amount" value="'.$row['sunday-amount'].'">
+                    <span>'.str_replace('-amount','',ucfirst($day)).' </span><input type = "text" class="form-control mb-2" name = "monday-amount" value="'.$row[$day].'">
                     <input type = "submit" class="btn btn-success float-end" name="EditIndividual" value = "Edit">
                     </form>
                 ';

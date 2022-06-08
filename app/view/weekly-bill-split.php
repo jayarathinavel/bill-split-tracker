@@ -11,9 +11,6 @@
 ?>
 
 <head>
-    <!-- <meta charset="UTF-8"> -->
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Weekly Bill Split Tracker</title>
     <script>
         //For avoidinf Confirm Form Submission on reload
@@ -54,6 +51,24 @@
     if ($isEditMode) {
         echo '<a class = "btn btn-danger mt-2" href="/weekly-bill-split"> Exit Edit Mode </a>';
     }
+
+    if($displayReloadMessage) {
+        echo '
+        <div class="alignCenter">
+            <p class="displayInline"> Updating please wait. </p>
+            <div class="spinner-border spinner-border-sm displayInline" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        ' ;
+        if(isset($_GET['query']) && ($_GET['query']) === 'editMode'){
+            echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split?query=editMode"/>';
+        }
+        else{
+            echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split"/>';
+        }
+    }
+
     if ($isEditFormDisplayed || $isEditFormDisplayedForIndividualAmounts) { ?>
         <div class="editSection alignCenter mt-3">
             <div class="card" style="width: 50rem;">
@@ -71,17 +86,7 @@
             </div>
         </div>
     <?php } ?>
-    <?php if($displayReloadMessage) {
-        echo '
-        <div class="alignCenter">
-            <p class="displayInline"> Updating please wait. </p>
-            <div class="spinner-border spinner-border-sm displayInline" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-        ' ;
-        echo '<meta http-equiv = "refresh" content = "0; url=/weekly-bill-split"/>';
-    }?>
+
     <?php if(!$displayReloadMessage) { ?>
     <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p class="mt-3">Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
     <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable" style="width:100%;">
@@ -203,14 +208,14 @@
 
     <!-- Add New Bill to All Modal -->
     <div class="modal" tabindex="-1" id="addMultipleBillModal">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add New Bill to All</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="<?php $weeklyBillSplitController->insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) ?>">
+                    <form id="addMultipleBill" method="POST" action="<?php $weeklyBillSplitController->insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) ?>">
                         <input type="text" class="form-control mb-2" name="billName" placeholder="Bill Name" />
                         <select name="day" class="form-select mb-2">
                         <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
@@ -226,14 +231,17 @@
                             <input type="number" class="form-control" id="splitEqualField" placeholder="Amount" aria-label="Amount" aria-describedby="splitEqual">
                             <button class="btn btn-primary" type="button" id="splitEqual" onclick="hideInputFieldsInAddBillToAll()">Split Equally</button>
                         </div>
-                        <p id="individualAmountInAddToAll" class="fw-bold text-center">Individual Amounts</p>
+                        <p class="text-center"> (or) </p>
+                        <p id="individualAmountInAddToAll" class="fw-bold text-center">Split Individually</p>
                         <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn, $conn2); ?>
                         <div id="amountSplittedEqually" class="text-success fw-bold"></div>
                         <div id="splitValues"></div>
                         <span class="mt-1 mb-1 me-1"><strong>Total : </strong></span><span id="sumForAddBillToAll">0</span>
-                        <input type="submit" class="btn btn-success float-end ms-1" value="Add"> 
-                        <input type="reset" onclick="showInputFieldsInAddBillToAll()" value="Reset" class="btn btn-danger float-end">
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" form="addMultipleBill" class="btn btn-success float-end ms-1" value="Add"> 
+                    <input type="reset" form="addMultipleBill" onclick="showInputFieldsInAddBillToAll()" value="Reset" class="btn btn-danger float-end">
                 </div>
             </div>
         </div>
