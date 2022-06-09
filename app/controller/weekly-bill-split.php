@@ -3,6 +3,7 @@
     const TD_OPEN = '<td>';
     const TD_CLOSE = '</td>';
     const TR_OPEN = '<tr>';
+    const TR_OPEN_PAID = '<tr style="text-decoration: line-through; opacity:50%;">';
     const TR_CLOSE = '</tr>';
     const BR_TAG = '<br>';
     const TOTAL_OPEN = '<b>';
@@ -48,30 +49,37 @@
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
                     $id = $row['id'];
+                    $isMarkedAsPaid = $row['is_marked_as_paid'];
                     $individualRecordEditButton = $isEditMode ? '<br><a class="ml-1 text-danger" href="/weekly-bill-split?query=editMode&id='.$id.'&day=#day"> <i class="bi bi-pencil-square"></i></a>' : '';
-                    echo TR_OPEN;
+                    echo $isMarkedAsPaid == 1 ? TR_OPEN_PAID : TR_OPEN;
+                    TR_OPEN;
                     if($isEditMode) {
-                        echo '
-                        <td>
-                            <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST">
-                                <input type="hidden" name="personForDeleting" value="'.$id.'">
-                                <button title="Delete Person" class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i></button>
-                            </form>
-                            <a title ="Edit Person Name" class="btn btn-sm btn-danger mt-1" href="/weekly-bill-split?query=editMode&id='.$id.'"> <i class="bi bi-pencil-square"></i></a>
-                        </td>
-                        ';
+                        echo '<td>';
+                            if(!$isMarkedAsPaid){
+                            echo'
+                                <form action="'.$this->deleteSinglePerson($conn, $conn2).'" method="POST">
+                                    <input type="hidden" name="personForDeleting" value="'.$id.'">
+                                    <button title="Delete Person" class="btn btn-sm btn-danger"type="submit" onClick="return confirmSubmit()"> <i class="bi bi-trash-fill "></i></button>
+                                </form>
+                                <a title ="Edit Person Name" class="btn btn-sm btn-danger mt-1" href="/weekly-bill-split?query=editMode&id='.$id.'"> <i class="bi bi-pencil-square"></i></a>
+                            ';
+                            }
+                            else{
+                                echo '<span> PAID </span>';
+                            }
+                        echo '</td>';
                     }
                     echo TD_OPEN, $row['name'], TD_CLOSE,
-                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, str_replace("#day", $today, $individualRecordEditButton), TD_CLOSE,
-                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, str_replace("#day", $yesterday, $individualRecordEditButton), TD_CLOSE,
+                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", $today, $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", $yesterday, $individualRecordEditButton) : '', TD_CLOSE,
 
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, str_replace("#day", "monday-amount", $individualRecordEditButton), TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, str_replace("#day", "tuesday-amount", $individualRecordEditButton), TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, str_replace("#day", "wednesday-amount", $individualRecordEditButton), TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, str_replace("#day", "thursday-amount", $individualRecordEditButton), TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, str_replace("#day", "friday-amount", $individualRecordEditButton), TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, str_replace("#day", "saturday-amount", $individualRecordEditButton), TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, str_replace("#day", "sunday-amount", $individualRecordEditButton), TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "monday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "tuesday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "wednesday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "thursday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "friday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "saturday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "sunday-amount", $individualRecordEditButton) : '', TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), CURRENCY, TD_CLOSE,
                     TR_CLOSE;
                 }
@@ -404,5 +412,42 @@
             }
             return $updateResult;
         }
+
+        function markAsPaid($conn2){
+            $bookId = $this -> getBook($conn2)['book-id'];
+            $sql = "SELECT `id`, `name`, `is_marked_as_paid`  FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
+            $result = $conn2->query($sql);
+            if ($result->num_rows>0) {
+                while ($row = $result->fetch_assoc()) {
+                    $isPaid = $row['is_marked_as_paid'] == 1 ? 'disabled checked' : '';
+                    echo '
+                    <input class="form-check-input" type="checkbox" name ="nameForMarkAsPaid[]" id="'.$row['id'].'" value="'.$row['id'].'" '.$isPaid.' >
+                    <label for="'.$row['id'].'"> '.$row['name'].' </label><br>
+                    ';
+                }
+            }
+        }
+        function markAsPaidFormAction($conn, $conn2){
+            if(isset($_POST['nameForMarkAsPaid'])){
+                $markedAsPaid = $_POST['nameForMarkAsPaid'];
+                $markedAsPaidString = $this -> arrayToStr($markedAsPaid);
+                $markAsPaidSql = "UPDATE `weekly-bill-split` SET `is_marked_as_paid` = 1 WHERE `id` IN ($markedAsPaidString)";
+                $markAsPaidResult = $conn->query($markAsPaidSql);
+            }
+            return $markAsPaidResult;
+        }
+
+        function arrayToStr($array){
+            $str = '';
+            for ($i = 0; $i < sizeof($array); $i++) {
+                if ($i == 0) {
+                    $str = "'" . $array[$i];
+                } else {
+                    $str = $str . "','" . $array[$i];
+                }
+            }
+            return $str . "'";
+        }
+        
     }
 ?>

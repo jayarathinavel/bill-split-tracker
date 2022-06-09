@@ -4,7 +4,7 @@
     $functions -> loginRequired('weekly-bill-split');
     $weeklyBillSplitController = new WeeklyBillSplitController;
     $isEditMode = isset($_GET['query']) && ($_GET['query']) === 'editMode';
-    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2) || $weeklyBillSplitController -> executeEditPerson($id, $conn, $conn2) || $weeklyBillSplitController -> deleteSinglePerson($conn, $conn2) ||  $weeklyBillSplitController -> executeEditForIndividualAmounts($id, $conn, $conn2);
+    $displayReloadMessage = $weeklyBillSplitController -> insertNewPerson($weeklyBillSplitModel, $conn, $conn2) || $weeklyBillSplitController -> insertNewBill($conn, $conn2) || $weeklyBillSplitController -> insertNewMultiplePersonBill($conn, $conn2) || $weeklyBillSplitController -> createNewBook($conn, $conn2) || $weeklyBillSplitController -> changeBook($conn, $conn2) || $weeklyBillSplitController -> executeEditPerson($id, $conn, $conn2) || $weeklyBillSplitController -> deleteSinglePerson($conn, $conn2) || $weeklyBillSplitController -> executeEditForIndividualAmounts($id, $conn, $conn2) || $weeklyBillSplitController -> markAsPaidFormAction($conn, $conn2);
     $isEditFormDisplayed = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id'])  && !isset($_GET['day']);
     $isEditFormDisplayedForIndividualAmounts = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']) && isset($_GET['day']);
     $records = $weeklyBillSplitController -> findRecords($conn, $conn2);
@@ -43,7 +43,7 @@
             <li><a class="dropdown-item" href="/weekly-bill-split?query=editMode">Edit Mode</a></li>
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></li>
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changeBookModal">Change Book</a></li>
-           
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#markAsPaid">Mark as Paid</a></li>          
         </ul>
     </div>
     <?php
@@ -284,6 +284,25 @@
                         <select name = "bookIdToChange" class="form-select mb-2">
                             <?php $weeklyBillSplitController->showListOfBooksInSelect($conn, $conn2); ?>
                         </select>
+                        <input type="submit" class="btn btn-success float-end" value="Change">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mark as Paid Modal -->
+    <div class="modal" tabindex="-1" id="markAsPaid">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mark as Paid</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted"> ** Once Marked as Paid could not be reverted back ** </p>
+                    <form method="POST" action="<?php $weeklyBillSplitController->markAsPaidFormAction($conn, $conn2) ?>">
+                        <?php $weeklyBillSplitController->markAsPaid($conn2); ?>
                         <input type="submit" class="btn btn-success float-end" value="Change">
                     </form>
                 </div>
