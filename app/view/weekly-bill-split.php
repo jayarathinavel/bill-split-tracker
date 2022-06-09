@@ -233,7 +233,7 @@
                             <input type="number" class="form-control" id="splitEqualField" placeholder="Amount" aria-label="Amount" aria-describedby="splitEqual">
                             <button class="btn btn-primary" type="button" id="splitEqual" onclick="hideInputFieldsInAddBillToAll()">Split Equally</button>
                         </div>
-                        <p class="text-center"> (or) </p>
+                        <p class="text-center" id="orInAddToAll"> (or) </p>
                         <p id="individualAmountInAddToAll" class="fw-bold text-center">Split Individually</p>
                         <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn, $conn2); ?>
                         <div id="amountSplittedEqually" class="text-success fw-bold"></div>

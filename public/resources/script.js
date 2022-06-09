@@ -7,6 +7,7 @@ $("#splitEqual").click(function(event) {
 
 function hideInputFieldsInAddBillToAll() { 
     $("#individualAmountInAddToAll").prop("hidden", true);
+    $("#orInAddToAll").prop("hidden", true);    
     $(".inputForAddBillToAll").prop("hidden", true);
     $(".labelForAddBillToAll").prop("hidden", true);
     $("#splitEqual").click(function (event) {
@@ -27,6 +28,7 @@ function showInputFieldsInAddBillToAll() {
     $(".inputForAddBillToAll").prop("hidden", false);
     $(".labelForAddBillToAll").prop("hidden", false);
     $("#individualAmountInAddToAll").prop("hidden", false);
+    $("#orInAddToAll").prop("hidden", false);    
     $('#sumForAddBillToAll').text('0');
     $('#amountSplittedEqually').text('');
     $('#splitValues').html('');

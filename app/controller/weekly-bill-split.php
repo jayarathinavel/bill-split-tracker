@@ -62,8 +62,8 @@
                         ';
                     }
                     echo TD_OPEN, $row['name'], TD_CLOSE,
-                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, TD_CLOSE,
-                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, TD_CLOSE,
+                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, str_replace("#day", $today, $individualRecordEditButton), TD_CLOSE,
+                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, str_replace("#day", $yesterday, $individualRecordEditButton), TD_CLOSE,
 
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, str_replace("#day", "monday-amount", $individualRecordEditButton), TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, str_replace("#day", "tuesday-amount", $individualRecordEditButton), TD_CLOSE,
@@ -383,7 +383,7 @@
                     <form action = "" method = "POST">
                     <p class="text-muted"> ** Please maintain the Comma Seperated Format ** </p>
                     <span>Name</span><input type = "text" class="form-control mb-2" name="personNameForEdit" value="'.$row['name'].'">
-                    <span>'.str_replace('-amount','',ucfirst($day)).' </span><input type = "text" class="form-control mb-2" name = "monday-amount" value="'.$row[$day].'">
+                    <span>'.str_replace('-amount','',ucfirst($day)).' </span><input type = "text" class="form-control mb-2" name = "'.$day.'" value="'.$row[$day].'">
                     <input type = "submit" class="btn btn-success float-end" name="EditIndividual" value = "Edit">
                     </form>
                 ';
@@ -393,15 +393,10 @@
 
         function executeEditForIndividualAmounts($id, $conn, $conn2){
             if(isset($_POST['EditIndividual'])){
+                $day = $_GET['day'];
                 $personName = $_POST['personNameForEdit'];
-                $mondayAmount = $_POST['monday-amount'];
-                $tuesdayAmount = $_POST['tuesday-amount'];
-                $wednesdayAmount = $_POST['wednesday-amount'];
-                $thursdayAmount = $_POST['thursday-amount'];
-                $fridayAmount = $_POST['friday-amount'];
-                $saturdayAmount = $_POST['saturday-amount'];
-                $sundayAmount = $_POST['sunday-amount'];
-                $sql = "UPDATE `weekly-bill-split` SET `name` = '$personName', `monday-amount` = '$mondayAmount',`tuesday-amount` = '$tuesdayAmount', `wednesday-amount` = '$wednesdayAmount', `thursday-amount` = '$thursdayAmount',`friday-amount` = '$fridayAmount', `saturday-amount` = '$saturdayAmount', `sunday-amount` = '$sundayAmount'  WHERE `id` = '$id'";
+                $dayAmount = $_POST[ $day];
+                $sql = "UPDATE `weekly-bill-split` SET `name` = '$personName', `$day` = '$dayAmount'  WHERE `id` = '$id'";
                 $updateResult = $conn->query($sql);
             }
             return $updateResult;
