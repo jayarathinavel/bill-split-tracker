@@ -72,21 +72,25 @@
     }
 
     if ($isEditFormDisplayed || $isEditFormDisplayedForIndividualAmounts) { ?>
-        <div class="editSection alignCenter mt-3">
-            <div class="card" style="width: 50rem;">
-            <div class="card-body">
-                <h5 class="card-title">Edit</h5>
-                <?php
-                    if($isEditFormDisplayed && !$isEditFormDisplayedForIndividualAmounts){
-                        $weeklyBillSplitController->renderEditFormForPersonName($_GET['id'], $conn, $conn2);
-                    }
-                    elseif(!$isEditFormDisplayed && $isEditFormDisplayedForIndividualAmounts){
-                        $weeklyBillSplitController->renderEditFormForIndividualAmounts($_GET['id'], $conn, $conn2);
-                    }
-                ?>
+        <?php if(!$displayReloadMessage) { ?>
+            <div class="editSection alignCenter mt-3">
+                <div class="card" style="width: 50rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Edit</h5>
+        <?php } ?>
+                    <?php
+                        if($isEditFormDisplayed && !$isEditFormDisplayedForIndividualAmounts){
+                            $weeklyBillSplitController->renderEditFormForPersonName($_GET['id'], $conn, $conn2, $displayReloadMessage);
+                        }
+                        elseif(!$isEditFormDisplayed && $isEditFormDisplayedForIndividualAmounts){
+                            $weeklyBillSplitController->renderEditFormForIndividualAmounts($_GET['id'], $conn, $conn2, $displayReloadMessage);
+                        }
+                    ?>
+        <?php if(!$displayReloadMessage) { ?>
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
+        <?php } ?>
     <?php } ?>
 
     <?php if(!$displayReloadMessage) { ?>

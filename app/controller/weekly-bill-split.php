@@ -141,6 +141,7 @@
             $bookId = $this->getBook($conn2)['book-id'];
             $name = ($weeklyBillSplitModel -> getName()) != null ? $weeklyBillSplitModel -> getName() : '';
             $billName = trim($_POST["billName"]);
+            $amount = trim($_POST["amount"]);
             switch (trim($_POST["day"])) {
                 case 'monday':
                     $weeklyBillSplitModel -> setMondayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
@@ -166,13 +167,15 @@
                 default :
                     $weeklyBillSplitModel = null;
             }
-            $mondayAmount = $weeklyBillSplitModel -> getMondayAmount();
-            $tuesdayAmount = $weeklyBillSplitModel -> getTuesdayAmount();
-            $wednesdayAmount = $weeklyBillSplitModel -> getWednesdayAmount(); 
-            $thursdayAmount = $weeklyBillSplitModel -> getThursdayAmount();
-            $fridayAmount = $weeklyBillSplitModel -> getFridayAmount();
-            $saturdayAmount = $weeklyBillSplitModel -> getSaturdayAmount();
-            $sundayAmount = $weeklyBillSplitModel -> getSundayAmount();
+            if($billName != '' && $amount != ''){
+                $mondayAmount = $weeklyBillSplitModel -> getMondayAmount();
+                $tuesdayAmount = $weeklyBillSplitModel -> getTuesdayAmount();
+                $wednesdayAmount = $weeklyBillSplitModel -> getWednesdayAmount(); 
+                $thursdayAmount = $weeklyBillSplitModel -> getThursdayAmount();
+                $fridayAmount = $weeklyBillSplitModel -> getFridayAmount();
+                $saturdayAmount = $weeklyBillSplitModel -> getSaturdayAmount();
+                $sundayAmount = $weeklyBillSplitModel -> getSundayAmount();
+            }
             $sql = "INSERT INTO `weekly-bill-split` (`book-id`, `name`, `monday-amount`, `tuesday-amount`, `wednesday-amount`, `thursday-amount`, `friday-amount`, `saturday-amount`, `sunday-amount`)
             VALUES ('$bookId', '$name', '$mondayAmount', '$tuesdayAmount', '$wednesdayAmount', '$thursdayAmount', '$fridayAmount', '$saturdayAmount', '$sundayAmount')";
             $result = $conn->query($sql);
@@ -346,12 +349,12 @@
             }
         }
 
-        function renderEditFormForPersonName($id, $conn, $conn2){
+        function renderEditFormForPersonName($id, $conn, $conn2, $displayReloadMessage){
             $sql = "SELECT `name` FROM `weekly-bill-split` WHERE id = '$id' ";
             $result = $conn2->query($sql);
             $row = $result->fetch_assoc();
             $isEditFormDisplayed = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']);
-            if($isEditFormDisplayed){
+            if($isEditFormDisplayed && !$displayReloadMessage){
                 echo '
                     <form action = "" method = "POST">
                         <input type = "text" class="form-control mb-2" name="personNameForEdit" value="'.$row['name'].'">
@@ -372,12 +375,12 @@
             return $updateResult;
         }
 
-        function renderEditFormForIndividualAmounts($id, $conn, $conn2){
+        function renderEditFormForIndividualAmounts($id, $conn, $conn2, $displayReloadMessage){
             $sql = "SELECT * FROM `weekly-bill-split` WHERE id = '$id' ";
             $result = $conn2->query($sql);
             $row = $result->fetch_assoc();
             $isEditFormDisplayedForIndividualAmounts = isset($_GET['query']) && ($_GET['query']) === 'editMode' && isset($_GET['id']) && isset($_GET['day']);
-            if($isEditFormDisplayedForIndividualAmounts){
+            if($isEditFormDisplayedForIndividualAmounts && !$displayReloadMessage){
                 $day = $_GET['day'];
                 echo '
                     <form action = "" method = "POST">
