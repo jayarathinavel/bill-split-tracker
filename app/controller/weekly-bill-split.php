@@ -328,7 +328,7 @@
                 while ($row = $result->fetch_assoc()) {
                     echo '
                         <label for="'.$row['id'].'" class="form-label labelForAddBillToAll">'.$row['name'].'</label>
-                        <input type="number" class="form-control mb-2 inputForAddBillToAll" value="" name = "amount-for-'.$row['name'].'" placeholder="Amount" id="'.$row['id'].'" />
+                        <input type="number" step="any" class="form-control mb-2 inputForAddBillToAll" value="" name = "amount-for-'.$row['name'].'" placeholder="Amount" id="'.$row['id'].'" />
                     ';
                 }
             }

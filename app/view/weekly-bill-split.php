@@ -173,7 +173,7 @@
                             <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
                             <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
                         </select>
-                        <input type="number" class="form-control mb-2" name="amount" placeholder="Amount">
+                        <input type="number" step="any" class="form-control mb-2" name="amount" placeholder="Amount">
                         <input type="submit" class="btn btn-success float-end" value="Add">
                     </form>
                 </div>
@@ -204,7 +204,7 @@
                             <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
                             <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
                         </select>
-                        <input type="number" class="form-control mb-2" name="amount" placeholder="Amount">
+                        <input type="number" step="any" class="form-control mb-2" name="amount" placeholder="Amount">
                         <input type="submit" class="btn btn-success float-end" value="Add">
                     </form>
                 </div>
