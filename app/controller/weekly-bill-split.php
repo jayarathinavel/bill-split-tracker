@@ -303,6 +303,7 @@
                 TD_OPEN, array_sum($fridayAmount), CURRENCY, TD_CLOSE,
                 TD_OPEN, array_sum($saturdayAmount), CURRENCY, TD_CLOSE,
                 TD_OPEN, array_sum($sundayAmount), CURRENCY, TD_CLOSE,
+                TD_OPEN, array_sum($mondayAmount) +  array_sum($tuesdayAmount) + array_sum($wednesdayAmount) + array_sum($thursdayAmount) + array_sum($fridayAmount) + array_sum($saturdayAmount) + array_sum($sundayAmount), CURRENCY, TD_CLOSE,
                 TD_OPEN, TD_CLOSE, //For Person Total Column
             TR_CLOSE;
         }
