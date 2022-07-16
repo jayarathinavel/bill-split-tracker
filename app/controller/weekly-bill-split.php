@@ -310,7 +310,7 @@
 
         function getPersonNamesInSelectOptions($conn, $conn2){
             $bookId = $this -> getBook($conn2)['book-id'];
-            $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
+            $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId' AND `is_marked_as_paid` = 0";
             $result = $conn2->query($sql);
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
@@ -323,7 +323,7 @@
 
         function getPersonNamesInDisabledInput($conn, $conn2){
             $bookId = $this -> getBook($conn2)['book-id'];
-            $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
+            $sql = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId' AND `is_marked_as_paid` = 0";
             $result = $conn2->query($sql);
             if ($result->num_rows>0) {
                 while ($row = $result->fetch_assoc()) {
