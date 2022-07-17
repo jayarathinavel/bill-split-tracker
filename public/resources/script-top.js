@@ -39,6 +39,8 @@ function calculateSum() {
         }
     });
     $("#sumForAddBillToAll").html(sum);
+    $('#amountForBillDetails').val(sum);
+
 }
 
 //

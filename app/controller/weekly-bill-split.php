@@ -149,44 +149,8 @@
             $weeklyBillSplitModel -> setName(trim($_POST["name"]));
             $bookId = $this->getBook($conn2)['book-id'];
             $name = ($weeklyBillSplitModel -> getName()) != null ? $weeklyBillSplitModel -> getName() : '';
-            $billName = trim($_POST["billName"]);
-            $amount = trim($_POST["amount"]);
-            switch (trim($_POST["day"])) {
-                case 'monday':
-                    $weeklyBillSplitModel -> setMondayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
-                    break;
-                case 'tuesday':
-                    $weeklyBillSplitModel -> setTuesdayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
-                    break;
-                case 'wednesday':
-                    $weeklyBillSplitModel -> setWednesdayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
-                    break;
-                case 'thursday':
-                    $weeklyBillSplitModel -> setThursdayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
-                    break;
-                case 'friday':
-                    $weeklyBillSplitModel -> setFridayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
-                    break;
-                case 'saturday':
-                    $weeklyBillSplitModel -> setSaturdayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
-                    break;
-                case 'sunday':
-                    $weeklyBillSplitModel -> setSundayAmount($billName .':'. trim($_POST["amount"]) .'; ' );
-                    break;
-                default :
-                    $weeklyBillSplitModel = null;
-            }
-            if($billName != '' && $amount != ''){
-                $mondayAmount = $weeklyBillSplitModel -> getMondayAmount();
-                $tuesdayAmount = $weeklyBillSplitModel -> getTuesdayAmount();
-                $wednesdayAmount = $weeklyBillSplitModel -> getWednesdayAmount(); 
-                $thursdayAmount = $weeklyBillSplitModel -> getThursdayAmount();
-                $fridayAmount = $weeklyBillSplitModel -> getFridayAmount();
-                $saturdayAmount = $weeklyBillSplitModel -> getSaturdayAmount();
-                $sundayAmount = $weeklyBillSplitModel -> getSundayAmount();
-            }
-            $sql = "INSERT INTO `weekly-bill-split` (`book-id`, `name`, `monday-amount`, `tuesday-amount`, `wednesday-amount`, `thursday-amount`, `friday-amount`, `saturday-amount`, `sunday-amount`, `is_marked_as_paid`)
-            VALUES ('$bookId', '$name', '$mondayAmount', '$tuesdayAmount', '$wednesdayAmount', '$thursdayAmount', '$fridayAmount', '$saturdayAmount', '$sundayAmount', 0)";
+            $sql = "INSERT INTO `weekly-bill-split` (`book-id`, `name`, `is_marked_as_paid`)
+            VALUES ('$bookId', '$name', 0)";
             $result = $conn->query($sql);
             $conn->close();
             return $result;
@@ -212,6 +176,8 @@
             $bookId = $this->getBook($conn2)['book-id'];
             $sqlToSelectNames = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $names = $conn2->query($sqlToSelectNames);
+            $billDetailsId = $this -> insertBillDetails($conn2, $conn);
+            $billName = $billDetailsId.'~'.trim($_POST["billName"]);
             if ($names->num_rows>0) {
                 while ($row = $names->fetch_assoc()) {
                     $personName = $row['name'];
@@ -219,8 +185,7 @@
                     $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
                     $result = $conn2->query($existingRecordSql)->fetch_assoc();
                     $existingRecord = $result[$day];
-                    $billDetailsId = $this -> insertBillDetails($conn2, $conn);
-                    $newRecord = trim($_POST["amount-for-$personName"]) == '' ? '' : $billDetailsId.'~'.trim($_POST["billName"]) .':'. trim($_POST["amount-for-$personName"]) .'; ';
+                    $newRecord = trim($_POST["amount-for-$personName"]) == '' ? '' : $billName .':'. trim($_POST["amount-for-$personName"]) .'; ';
                     $modifiedRecord = $existingRecord . $newRecord;
                     $sql = "UPDATE `weekly-bill-split` SET `$day` = '$modifiedRecord' WHERE `book-id` = '$bookId' AND `name` = '$personName'";
                     $result = $conn->query($sql);
@@ -262,6 +227,7 @@
             $row = $result->fetch_assoc();
             $billDetails = '<b class="font-size-small"> Bill Name : </b>' . LI_OPEN . $row['bill_name'] . LI_CLOSE;
             $billDetails .= LI_OPEN . '<b class="font-size-small"> Description : </b> <p class="font-size-smaller displayInline">' . $row['bill_desc'] . '</p>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Bill Amount : </b> <p class="font-size-small displayInline">' . $row['amount'] . '</p>' . LI_CLOSE;
             $billDetails .= LI_OPEN . '<b class="font-size-small"> Mode : </b> <span class="paymentTypeInWbs">' . $row['payment_type'] . '</span>' . LI_CLOSE;
             $billDetails .= LI_OPEN . '<b class="font-size-small"> Time : </b><span class="font-size-smaller" >' . $row['timestamp'] . '</span>' . LI_CLOSE;
             return $billDetails; 
@@ -272,10 +238,11 @@
             $billName = trim($_POST["billName"]);
             $billDesc = trim($_POST["billDesc"]);
             $paymentMode = trim($_POST["paymentMode"]);
+            $amount = trim($_POST["amount"]);
             $timestamp = $datetime -> format('Y-m-d h:m:s');
             $lastId = $conn2 -> query("SELECT MAX(bill_details_id) from `weekly-bill-split-bill-details`") -> fetch_assoc()['MAX(bill_details_id)'];
             $lastId +=1;
-            $sql = "INSERT INTO `weekly-bill-split-bill-details`(`bill_details_id`, `bill_name`, `bill_desc`, `payment_type`, `timestamp`) VALUES ('$lastId', '$billName', '$billDesc', '$paymentMode', '$timestamp')";
+            $sql = "INSERT INTO `weekly-bill-split-bill-details`(`bill_details_id`, `bill_name`, `bill_desc`, `payment_type`, `amount`, `timestamp`) VALUES ('$lastId', '$billName', '$billDesc', '$paymentMode', '$amount', '$timestamp')";
             $conn->query($sql);
             return $lastId;
         }

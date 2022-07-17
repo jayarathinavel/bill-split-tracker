@@ -3,6 +3,7 @@ $("#splitEqual").click(function(event) {
     var noOfPersons = document.getElementsByClassName("inputForAddBillToAll").length;
     var amount = document.getElementById("splitEqualField").value;
     $('.inputForAddBillToAll').val(amount/noOfPersons);
+    $('#amountForBillDetails').val(amount);
 });
 
 function hideInputFieldsInAddBillToAll() { 
