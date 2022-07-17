@@ -60,3 +60,20 @@ td{
         display:table-cell !important;
     }
 }
+
+.paymentTypeInWbs{
+    font-size: small;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: green;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.font-size-small{
+    font-size: small;
+}
+
+.font-size-smaller{
+    font-size: smaller;
+}

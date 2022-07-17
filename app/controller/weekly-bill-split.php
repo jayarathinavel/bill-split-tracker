@@ -13,7 +13,8 @@
     const TD_YESTERDAY = '<td class="yesterday">';
     const TD_TODAY = '<td class="today">';
     const CURRENCY = ' ₹';
-
+    const LI_OPEN = '<li class="displayInline">';
+    const LI_CLOSE = '</li><br>';
 
     class WeeklyBillSplitController{
         //Add New Person
@@ -70,16 +71,16 @@
                         echo '</td>';
                     }
                     echo TD_OPEN, $row['name'], TD_CLOSE,
-                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", $today, $individualRecordEditButton) : '', TD_CLOSE,
-                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday]), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", $yesterday, $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_TODAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$today], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$today]), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", $today, $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_YESTERDAY, DIV_OPEN, $this -> removeSymbolsAndFormatData($row[$yesterday], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row[$yesterday]), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", $yesterday, $individualRecordEditButton) : '', TD_CLOSE,
 
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "monday-amount", $individualRecordEditButton) : '', TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "tuesday-amount", $individualRecordEditButton) : '', TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "wednesday-amount", $individualRecordEditButton) : '', TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "thursday-amount", $individualRecordEditButton) : '', TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "friday-amount", $individualRecordEditButton) : '', TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "saturday-amount", $individualRecordEditButton) : '', TD_CLOSE,
-                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount']), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "sunday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['monday-amount'], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['monday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "monday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['tuesday-amount'], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['tuesday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "tuesday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['wednesday-amount'], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['wednesday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "wednesday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['thursday-amount'], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['thursday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "thursday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['friday-amount'], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['friday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "friday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['saturday-amount'], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['saturday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "saturday-amount", $individualRecordEditButton) : '', TD_CLOSE,
+                    TD_OPEN, DIV_OPEN, $this -> removeSymbolsAndFormatData($row['sunday-amount'], $conn2), DIV_CLOSE, TOTAL_OPEN, $this ->  individualDayTotal($row['sunday-amount']), TOTAL_CLOSE, !$isMarkedAsPaid ? str_replace("#day", "sunday-amount", $individualRecordEditButton) : '', TD_CLOSE,
                     TD_OPEN, DIV_OPEN, $this -> findIndividualWeekTotal($row), CURRENCY, TD_CLOSE,
                     TR_CLOSE;
                 }
@@ -184,8 +185,8 @@
                 $saturdayAmount = $weeklyBillSplitModel -> getSaturdayAmount();
                 $sundayAmount = $weeklyBillSplitModel -> getSundayAmount();
             }
-            $sql = "INSERT INTO `weekly-bill-split` (`book-id`, `name`, `monday-amount`, `tuesday-amount`, `wednesday-amount`, `thursday-amount`, `friday-amount`, `saturday-amount`, `sunday-amount`)
-            VALUES ('$bookId', '$name', '$mondayAmount', '$tuesdayAmount', '$wednesdayAmount', '$thursdayAmount', '$fridayAmount', '$saturdayAmount', '$sundayAmount')";
+            $sql = "INSERT INTO `weekly-bill-split` (`book-id`, `name`, `monday-amount`, `tuesday-amount`, `wednesday-amount`, `thursday-amount`, `friday-amount`, `saturday-amount`, `sunday-amount`, `is_marked_as_paid`)
+            VALUES ('$bookId', '$name', '$mondayAmount', '$tuesdayAmount', '$wednesdayAmount', '$thursdayAmount', '$fridayAmount', '$saturdayAmount', '$sundayAmount', 0)";
             $result = $conn->query($sql);
             $conn->close();
             return $result;
@@ -198,7 +199,8 @@
             $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
             $result = $conn2->query($existingRecordSql)->fetch_assoc();
             $existingRecord = $result[$day];
-            $newRecord = trim($_POST["billName"]) .':'. trim($_POST["amount"]) .'; ';
+            $billDetailsId = $this -> insertBillDetails($conn2, $conn);
+            $newRecord = $billDetailsId.'~'.trim($_POST["billName"]) .':'. trim($_POST["amount"]) .'; ';
             $modifiedRecord = $existingRecord . $newRecord;
             $sql = "UPDATE `weekly-bill-split` SET `$day` = '$modifiedRecord' WHERE `book-id` = '$bookId' AND `name` = '$personName'";
             $result = $conn->query($sql);
@@ -217,7 +219,8 @@
                     $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
                     $result = $conn2->query($existingRecordSql)->fetch_assoc();
                     $existingRecord = $result[$day];
-                    $newRecord = trim($_POST["amount-for-$personName"]) == '' ? '' : trim($_POST["billName"]) .':'. trim($_POST["amount-for-$personName"]) .'; ';
+                    $billDetailsId = $this -> insertBillDetails($conn2, $conn);
+                    $newRecord = trim($_POST["amount-for-$personName"]) == '' ? '' : $billDetailsId.'~'.trim($_POST["billName"]) .':'. trim($_POST["amount-for-$personName"]) .'; ';
                     $modifiedRecord = $existingRecord . $newRecord;
                     $sql = "UPDATE `weekly-bill-split` SET `$day` = '$modifiedRecord' WHERE `book-id` = '$bookId' AND `name` = '$personName'";
                     $result = $conn->query($sql);
@@ -227,10 +230,54 @@
             return $result;                        
         }
 
-        function removeSymbolsAndFormatData($data){
-            $data = str_replace(':', ' : ', $data);
-            $data = str_replace(';','<br>', $data);
-            return $data; 
+        function removeSymbolsAndFormatData($data, $conn2){
+            $finalData = "";
+            $data = explode(';', $data);
+            for($i = 0; $i < sizeof($data); $i++){
+                $newData[] = explode('~', $data[$i]);
+            }
+            foreach($newData as $billDetailsIdSplitted){
+                $billDetails = '
+                <div class="dropdown displayInline">
+                    <span id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-plus-circle-fill"></i>
+                    </span>
+                    <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton1">
+                    '.
+                        $this -> findBillDetails(trim($billDetailsIdSplitted[0]), $conn2)
+                    .'
+                    </ul>
+                </div>';
+                $data = $billDetailsIdSplitted[1].';';
+                $data = str_replace(':', ' : ', $data);
+                $data = $data != ';' ? str_replace(';', $billDetails.'<br>', $data) : '';
+                $finalData = $finalData.$data;
+            } 
+            return $finalData; 
+        }
+
+        function findBillDetails($billId, $conn2){
+            $sql = "SELECT * FROM `weekly-bill-split-bill-details` WHERE `bill_details_id` = '$billId'";
+            $result = $conn2 -> query($sql);
+            $row = $result->fetch_assoc();
+            $billDetails = '<b class="font-size-small"> Bill Name : </b>' . LI_OPEN . $row['bill_name'] . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Description : </b> <p class="font-size-smaller displayInline">' . $row['bill_desc'] . '</p>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Mode : </b> <span class="paymentTypeInWbs">' . $row['payment_type'] . '</span>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Time : </b><span class="font-size-smaller" >' . $row['timestamp'] . '</span>' . LI_CLOSE;
+            return $billDetails; 
+        }
+
+        function insertBillDetails($conn2, $conn){
+            $datetime = new DateTime();
+            $billName = trim($_POST["billName"]);
+            $billDesc = trim($_POST["billDesc"]);
+            $paymentMode = trim($_POST["paymentMode"]);
+            $timestamp = $datetime -> format('Y-m-d h:m:s');
+            $lastId = $conn2 -> query("SELECT MAX(bill_details_id) from `weekly-bill-split-bill-details`") -> fetch_assoc()['MAX(bill_details_id)'];
+            $lastId +=1;
+            $sql = "INSERT INTO `weekly-bill-split-bill-details`(`bill_details_id`, `bill_name`, `bill_desc`, `payment_type`, `timestamp`) VALUES ('$lastId', '$billName', '$billDesc', '$paymentMode', '$timestamp')";
+            $conn->query($sql);
+            return $lastId;
         }
 
         function individualDayTotal($data){

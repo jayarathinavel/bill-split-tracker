@@ -163,17 +163,17 @@
                 <div class="modal-body">
                     <form action="<?php $weeklyBillSplitController->insertNewPerson($weeklyBillSplitModel, $conn, $conn2); ?>" method="POST">
                         <input type="text" class="form-control mb-2" name="name" placeholder="Name of the Person">
-                        <input type="text" class="form-control mb-2" name="billName" placeholder="Name of the Bill">
+                        <!-- <input type="text" class="form-control mb-2" name="billName" placeholder="Name of the Bill">
                         <select name="day" class="form-select mb-2">
-                            <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
-                            <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
-                            <option value="wednesday" <?php echo strtolower(date('l')) == 'wednesday' ? 'selected' : '';?> >Wednesday</option>
-                            <option value="thursday" <?php echo strtolower(date('l')) == 'thursday' ? 'selected' : '';?> >Thursday</option>
-                            <option value="friday" <?php echo strtolower(date('l')) == 'friday' ? 'selected' : '';?> >Friday</option>
-                            <option value="saturday" <?php echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
-                            <option value="sunday" <?php echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
+                            <option value="monday" <?php //echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
+                            <option value="tuesday" <?php //echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
+                            <option value="wednesday" <?php //echo strtolower(date('l')) == 'wednesday' ? 'selected' : '';?> >Wednesday</option>
+                            <option value="thursday" <?php //echo strtolower(date('l')) == 'thursday' ? 'selected' : '';?> >Thursday</option>
+                            <option value="friday" <?php //echo strtolower(date('l')) == 'friday' ? 'selected' : '';?> >Friday</option>
+                            <option value="saturday" <?php //echo strtolower(date('l')) == 'saturday' ? 'selected' : '';?> >Saturday</option>
+                            <option value="sunday" <?php //echo strtolower(date('l')) == 'sunday' ? 'selected' : '';?> >Sunday</option>
                         </select>
-                        <input type="number" step="any" class="form-control mb-2" name="amount" placeholder="Amount">
+                        <input type="number" step="any" class="form-control mb-2" name="amount" placeholder="Amount"> -->
                         <input type="submit" class="btn btn-success float-end" value="Add">
                     </form>
                 </div>
@@ -195,6 +195,8 @@
                             <?php $weeklyBillSplitController->getPersonNamesInSelectOptions($conn, $conn2); ?>
                         </select>
                         <input type="text" class="form-control mb-2" name="billName" placeholder="Name of the Bill">
+                        <input type="text" class="form-control mb-2" name="billDesc" placeholder="Description">
+                        <input type="text" class="form-control mb-2" name="paymentMode" placeholder="Payment Mode">
                         <select name="day" class="form-select mb-2">
                         <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
                             <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
@@ -223,6 +225,8 @@
                 <div class="modal-body">
                     <form id="addMultipleBill" method="POST" action="<?php $weeklyBillSplitController->insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) ?>">
                         <input type="text" class="form-control mb-2" name="billName" placeholder="Bill Name" />
+                        <input type="text" class="form-control mb-2" name="billDesc" placeholder="Description">
+                        <input type="text" class="form-control mb-2" name="paymentMode" placeholder="Payment Mode">
                         <select name="day" class="form-select mb-2">
                         <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
                             <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
