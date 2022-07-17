@@ -35,6 +35,9 @@
         <i class="bi bi-plus-lg"></i><i class="bi bi-people-fill"></i>
     </button>
     <?php } ?>
+    <button type="button"  title="Open Calculator" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#calculatorModal">
+        <i class="bi bi-calculator"></i>
+    </button>
     <div class="btn-group mt-2">
         <button class="btn btn-primary dropdown-toggle" type="button" id="moreDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
             More
