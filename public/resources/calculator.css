@@ -12,9 +12,9 @@
   }
   
   .calculator {
-    width: 350px;
+    width: 90%;
     height: auto;
-    margin: 70px auto 0;
+    margin: 10px auto 0;
     overflow: hidden;
   }
   
