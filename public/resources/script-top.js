@@ -22,20 +22,6 @@ function confirmSubmit() {
         return false;
 }
 
-//For Datatables
-$(document).ready(function () {
-    $('#weeklyBillSplitTable').DataTable({
-        paging: false,
-        "bLengthChange": false,
-        "dom": '<"pull-left"f><"pull-right"l>tip',
-        "language": {
-            "search": "_INPUT_",
-            "searchPlaceholder": "Search"
-        },        
-        responsive: true,
-    });
-});
-
 //For Calculating Sum in Add Bill to All
 $(document).ready(function () {
     $(".inputForAddBillToAll").each(function () {

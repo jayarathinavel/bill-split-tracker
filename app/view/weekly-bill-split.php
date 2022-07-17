@@ -96,49 +96,49 @@
     <?php if(!$displayReloadMessage) { ?>
     <?php echo isset($weeklyBillSplitController->getBook($conn2)['book-name']) ? '<p class="mt-3">Book Name : <b>'. $weeklyBillSplitController->getBook($conn2)['book-name'].'</b></p>' : '<p class="text-center mt-2 mb-2"><b>No books found ! </b><a class="text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#createNewBookModal">Create New Book</a></p>'; ?>
     <div style="overflow-x: auto;">
-        <table class="table table-striped table-borderless dt-responsive nowrap" id="weeklyBillSplitTable">
+        <table class="table table-striped table-borderless center" id="weeklyBillSplitTable">
         <thead>
             <tr>
                 <?php
                 if ($isEditMode) {
                     echo '
-                            <th scope="col" class="text-center">
+                            <th scope="col" class="text-center min-width-for-td">
                                 Action
                             </th>
                             ';
                 }
                 ?>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Name
                 </th>
-                <th scope="col" class="text-center today">
+                <th scope="col" class="text-center today min-width-for-td">
                     Today
                 </th>
-                <th scope="col" class="text-center yesterday">
+                <th scope="col" class="text-center yesterday min-width-for-td">
                     Yesterday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Monday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Tuesday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Wednesday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Thursday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Friday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Saturday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Sunday
                 </th>
-                <th scope="col" class="text-center">
+                <th scope="col" class="text-center min-width-for-td">
                     Person total
                 </th>
             </tr>
