@@ -1,4 +1,5 @@
 <?php
+  date_default_timezone_set("Asia/Calcutta");
   $config = [
     'MODEL_PATH' => APPLICATION_PATH.'/model/',
     'VIEW_PATH' => APPLICATION_PATH.'/view/',
