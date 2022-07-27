@@ -225,11 +225,17 @@
             $sql = "SELECT * FROM `weekly-bill-split-bill-details` WHERE `bill_details_id` = '$billId'";
             $result = $conn2 -> query($sql);
             $row = $result->fetch_assoc();
-            $billDetails = '<b class="font-size-small"> Bill Name : </b>' . LI_OPEN . $row['bill_name'] . LI_CLOSE;
-            $billDetails .= LI_OPEN . '<b class="font-size-small"> Description : </b> <p class="font-size-smaller displayInline">' . $row['bill_desc'] . '</p>' . LI_CLOSE;
-            $billDetails .= LI_OPEN . '<b class="font-size-small"> Bill Amount : </b> <p class="font-size-small displayInline">' . $row['amount'] . '</p>' . LI_CLOSE;
-            $billDetails .= LI_OPEN . '<b class="font-size-small"> Mode : </b> <span class="paymentTypeInWbs">' . $row['payment_type'] . '</span>' . LI_CLOSE;
-            $billDetails .= LI_OPEN . '<b class="font-size-small"> Time : </b><span class="font-size-smaller" >' . $row['timestamp'] . '</span>' . LI_CLOSE;
+            $billName = !empty($row['bill_name']) ? $row['bill_name'] : 'NA';
+            $billDesc = !empty($row['bill_desc']) ? $row['bill_desc'] : 'NA';
+            $billAmount = !empty($row['amount']) ? $row['amount'] : 'NA';
+            $paymentType = !empty($row['payment_type']) ? $row['payment_type'] : 'NA';
+            $timestamp = !empty($row['timestamp']) ? date("M d, h:i", strtotime($row['timestamp'])) : 'NA';
+            $styleForPayment = !empty($row['payment_type']) ? 'paymentTypeInWbs' : '';
+            $billDetails = LI_OPEN . '<b class="font-size-small"> Bill Name : </b> <span class="font-size-smaller">' . $billName . '</span>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Description : </b> <span class="font-size-smaller">' . $billDesc . '</span>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Bill Amount : </b> <span class="font-size-smaller">' . $billAmount . '</spanp>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Mode : </b> <span class="'.$styleForPayment.' font-size-smaller">' . $paymentType . '</span>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Time : </b><span class="font-size-smaller">' . $timestamp . '</span>' . LI_CLOSE;
             return $billDetails; 
         }
 
@@ -239,7 +245,7 @@
             $billDesc = trim($_POST["billDesc"]);
             $paymentMode = trim($_POST["paymentMode"]);
             $amount = trim($_POST["amount"]);
-            $timestamp = $datetime -> format('Y-m-d h:m:s');
+            $timestamp = $datetime -> format('Y-m-d h:i:s');
             $lastId = $conn2 -> query("SELECT MAX(bill_details_id) from `weekly-bill-split-bill-details`") -> fetch_assoc()['MAX(bill_details_id)'];
             $lastId +=1;
             $sql = "INSERT INTO `weekly-bill-split-bill-details`(`bill_details_id`, `bill_name`, `bill_desc`, `payment_type`, `amount`, `timestamp`) VALUES ('$lastId', '$billName', '$billDesc', '$paymentMode', '$amount', '$timestamp')";

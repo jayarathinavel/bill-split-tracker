@@ -190,7 +190,12 @@
                         </select>
                         <input type="text" class="form-control mb-2" name="billName" placeholder="Name of the Bill" required>
                         <input type="text" class="form-control mb-2" name="billDesc" placeholder="Description">
-                        <input type="text" class="form-control mb-2" name="paymentMode" placeholder="Payment Mode">
+                        <select name="paymentMode" class="form-select mb-2">
+                            <option value="" disabled selected hidden>Select Payment Mode</option>
+                            <option value="Online">Online</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Credit">Credit</option>
+                        </select>                        
                         <select name="day" class="form-select mb-2">
                         <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
                             <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
@@ -220,7 +225,12 @@
                     <form id="addMultipleBill" method="POST" action="<?php $weeklyBillSplitController->insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) ?>">
                         <input type="text" class="form-control mb-2" name="billName" placeholder="Bill Name" required>
                         <input type="text" class="form-control mb-2" name="billDesc" placeholder="Description">
-                        <input type="text" class="form-control mb-2" name="paymentMode" placeholder="Payment Mode">
+                        <select name="paymentMode" class="form-select mb-2">
+                            <option value="" disabled selected hidden>Select Payment Mode</option>
+                            <option value="Online">Online</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Credit">Credit</option>
+                        </select>
                         <select name="day" class="form-select mb-2">
                             <option value="monday" <?php echo strtolower(date('l')) == 'monday' ? 'selected' : '';?> >Monday</option>
                             <option value="tuesday" <?php echo strtolower(date('l')) == 'tuesday' ? 'selected' : '';?> >Tuesday</option>
