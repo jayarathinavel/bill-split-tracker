@@ -175,12 +175,12 @@
         </div>
     </div>
 
-    <!-- Add New Bill Modal -->
+    <!-- Add Bill Modal -->
     <div class="modal" tabindex="-1" id="addBillModal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add New Bill to Individuals </h5>
+                    <h5 class="modal-title">Add Bill</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -213,12 +213,12 @@
         </div>
     </div>
 
-    <!-- Add New Bill to All Modal -->
+    <!-- Add Bill to Multiple -->
     <div class="modal" tabindex="-1" id="addMultipleBillModal">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add New Bill to All</h5>
+                    <h5 class="modal-title">Add Bill to Multiple</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
