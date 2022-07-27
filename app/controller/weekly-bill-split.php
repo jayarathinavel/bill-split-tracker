@@ -196,29 +196,36 @@
         }
 
         function removeSymbolsAndFormatData($data, $conn2){
-            $finalData = "";
-            $data = explode(';', $data);
-            for($i = 0; $i < sizeof($data); $i++){
-                $newData[] = explode('~', $data[$i]);
+            if(str_contains($data, "~")){
+                $finalData = "";
+                $data = explode(';', $data);
+                for($i = 0; $i < sizeof($data); $i++){
+                    $newData[] = explode('~', $data[$i]);
+                }
+                foreach($newData as $billDetailsIdSplitted){
+                    $billDetails = '
+                    <div class="dropdown displayInline">
+                        <span id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-circle-fill"></i>
+                        </span>
+                        <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton1">
+                        '.
+                            $this -> findBillDetails(trim($billDetailsIdSplitted[0]), $conn2)
+                        .'
+                        </ul>
+                    </div>';
+                    $data = $billDetailsIdSplitted[1].';';
+                    $data = str_replace(':', ' : ', $data);
+                    $data = $data != ';' ? str_replace(';', $billDetails.'<br>', $data) : '';
+                    $finalData = $finalData.$data;
+                } 
+                return $finalData;
             }
-            foreach($newData as $billDetailsIdSplitted){
-                $billDetails = '
-                <div class="dropdown displayInline">
-                    <span id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-plus-circle-fill"></i>
-                    </span>
-                    <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton1">
-                    '.
-                        $this -> findBillDetails(trim($billDetailsIdSplitted[0]), $conn2)
-                    .'
-                    </ul>
-                </div>';
-                $data = $billDetailsIdSplitted[1].';';
+            else{
                 $data = str_replace(':', ' : ', $data);
-                $data = $data != ';' ? str_replace(';', $billDetails.'<br>', $data) : '';
-                $finalData = $finalData.$data;
-            } 
-            return $finalData; 
+                $data = str_replace(';','<br>', $data);
+                return $data; 
+            }
         }
 
         function findBillDetails($billId, $conn2){
