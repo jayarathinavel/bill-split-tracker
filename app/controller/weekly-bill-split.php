@@ -237,9 +237,11 @@
             $billAmount = !empty($row['amount']) ? $row['amount'] : 'NA';
             $paymentType = !empty($row['payment_type']) ? $row['payment_type'] : 'NA';
             $timestamp = !empty($row['timestamp']) ? date("M d, h:i a", strtotime($row['timestamp'])) : 'NA';
+            $newLineForBillDesc = strlen($row['bill_desc']) > 12 ? '<br>' : '';
+            $newLineForBillName = strlen($row['bill_name']) > 12 ? '<br>' : '';
             $styleForPayment = !empty($row['payment_type']) ? 'paymentTypeInWbs' : '';
-            $billDetails = LI_OPEN . '<b class="font-size-small"> Bill Name : </b> <span class="font-size-smaller">' . $billName . '</span>' . LI_CLOSE;
-            $billDetails .= LI_OPEN . '<b class="font-size-small"> Description : </b> <span class="font-size-smaller">' . $billDesc . '</span>' . LI_CLOSE;
+            $billDetails = LI_OPEN . '<b class="font-size-small"> Bill Name : </b> '.$newLineForBillName.' <span class="font-size-smaller">' . $billName . '</span>' . LI_CLOSE;
+            $billDetails .= LI_OPEN . '<b class="font-size-small"> Description : </b> '.$newLineForBillDesc.' <span class="font-size-smaller">' . $billDesc . '</span>' . LI_CLOSE;
             $billDetails .= LI_OPEN . '<b class="font-size-small"> Bill Amount : </b> <span class="font-size-smaller">' . $billAmount . '</spanp>' . LI_CLOSE;
             $billDetails .= LI_OPEN . '<b class="font-size-small"> Mode : </b> <span class="'.$styleForPayment.' font-size-smaller">' . $paymentType . '</span>' . LI_CLOSE;
             $billDetails .= LI_OPEN . '<b class="font-size-small"> Time : </b><span class="font-size-smaller">' . $timestamp . '</span>' . LI_CLOSE;
