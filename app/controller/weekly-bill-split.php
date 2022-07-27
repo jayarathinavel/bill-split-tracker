@@ -236,7 +236,7 @@
             $billDesc = !empty($row['bill_desc']) ? $row['bill_desc'] : 'NA';
             $billAmount = !empty($row['amount']) ? $row['amount'] : 'NA';
             $paymentType = !empty($row['payment_type']) ? $row['payment_type'] : 'NA';
-            $timestamp = !empty($row['timestamp']) ? date("M d, h:i", strtotime($row['timestamp'])) : 'NA';
+            $timestamp = !empty($row['timestamp']) ? date("M d, h:i a", strtotime($row['timestamp'])) : 'NA';
             $styleForPayment = !empty($row['payment_type']) ? 'paymentTypeInWbs' : '';
             $billDetails = LI_OPEN . '<b class="font-size-small"> Bill Name : </b> <span class="font-size-smaller">' . $billName . '</span>' . LI_CLOSE;
             $billDetails .= LI_OPEN . '<b class="font-size-small"> Description : </b> <span class="font-size-smaller">' . $billDesc . '</span>' . LI_CLOSE;
@@ -252,7 +252,7 @@
             $billDesc = trim($_POST["billDesc"]);
             $paymentMode = trim($_POST["paymentMode"]);
             $amount = trim($_POST["amount"]);
-            $timestamp = $datetime -> format('Y-m-d h:i:s');
+            $timestamp = $datetime -> format('Y-m-d H:i:s');
             $lastId = $conn2 -> query("SELECT MAX(bill_details_id) from `weekly-bill-split-bill-details`") -> fetch_assoc()['MAX(bill_details_id)'];
             $lastId +=1;
             $sql = "INSERT INTO `weekly-bill-split-bill-details`(`bill_details_id`, `bill_name`, `bill_desc`, `payment_type`, `amount`, `timestamp`) VALUES ('$lastId', '$billName', '$billDesc', '$paymentMode', '$amount', '$timestamp')";
