@@ -81,16 +81,16 @@
                                     <form action="<?php $authorizationController -> resetPassword($conn, $authorizationModel); ?>" method="post"> 
                                         <div class="form-group">
                                             <label>New Password</label>
-                                            <input type="password" name="new_password" class="form-control <?php echo (!empty($authorizationModel -> getNewPasswordErr())) ? 'is-invalid' : ''; ?> <?php echo $formFields; ?>" value="<?php echo $authorizationModel -> getNewPassword(); ?>">
+                                            <input type="password" name="new_password" class="form-control <?php echo (!empty($authorizationModel -> getNewPasswordErr())) ? 'is-invalid' : ''; ?> <?php echo $formFields; ?>" value="<?php echo $authorizationModel -> getNewPassword(); ?>" required>
                                             <span class="invalid-feedback"><?php echo $authorizationModel -> getNewPasswordErr(); ?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Confirm Password</label>
-                                            <input type="password" name="confirm_password" class="form-control <?php echo (!empty($authorizationModel -> getConfirm_password_err())) ? 'is-invalid' : ''; ?> <?php echo $formFields; ?>">
+                                            <input type="password" name="confirm_password" class="form-control <?php echo (!empty($authorizationModel -> getConfirm_password_err())) ? 'is-invalid' : ''; ?> <?php echo $formFields; ?>" required>
                                             <span class="invalid-feedback"><?php echo $authorizationModel -> getConfirm_password_err(); ?></span>
                                         </div>
                                         <div class="form-group mt-2">
-                                            <input type="submit" class="btn btn-success" value="Submit">
+                                            <input type="submit" class="btn btn-success" value="Submit" <?php echo ($_SESSION["username"] == 'demo') ? 'disabled': '' ?> >
                                             <a class="btn btn-danger ms-2" href="dashboard">Cancel</a>
                                         </div>
                                     </form>

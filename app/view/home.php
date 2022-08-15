@@ -4,7 +4,7 @@ if($functions -> isLoggedIn() === false){
     <div class="container mb-3">
     <p class="text-center fw-bold"> Welcome to Bill Split Tracker Web App</p>
         <div class="col-md-12 text-center">
-            <a type="button" href="/login" class="btn btn-primary">Login</a>
+            <a type="button" href="/login" class="btn btn-primary">Login</a> <a type="button" href="/login?query=demo" class="btn btn-danger ms-1">Demo</a>
         </div>
     </div>';
   }
