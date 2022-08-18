@@ -189,7 +189,7 @@
                             <?php $weeklyBillSplitController->getPersonNamesInSelectOptions($conn, $conn2); ?>
                         </select>
                         <input type="text" class="form-control mb-2" name="billName" placeholder="Name of the Bill" required>
-                        <input type="text" class="form-control mb-2" name="billDesc" placeholder="Description">
+                        <textarea rows="2" class="form-control mb-2" name="billDesc" placeholder="Description"></textarea>
                         <select name="paymentMode" class="form-select mb-2">
                             <option value="" disabled selected hidden>Select Payment Mode</option>
                             <option value="Online">Online</option>
@@ -224,7 +224,7 @@
                 <div class="modal-body">
                     <form id="addMultipleBill" method="POST" action="<?php $weeklyBillSplitController->insertNewMultiplePersonBill($weeklyBillSplitModel, $conn) ?>">
                         <input type="text" class="form-control mb-2" name="billName" placeholder="Bill Name" required>
-                        <input type="text" class="form-control mb-2" name="billDesc" placeholder="Description">
+                        <textarea rows="2"  class="form-control mb-2" name="billDesc" placeholder="Description"></textarea>
                         <select name="paymentMode" class="form-select mb-2">
                             <option value="" disabled selected hidden>Select Payment Mode</option>
                             <option value="Online">Online</option>
@@ -250,8 +250,9 @@
                         <?php $weeklyBillSplitController->getPersonNamesInDisabledInput($conn, $conn2); ?>
                         <div id="amountSplittedEqually" class="text-success fw-bold"></div>
                         <div id="splitValues"></div>
-                        <span class="mt-1 mb-1 me-1"><strong>Total : </strong></span><span id="sumForAddBillToAll">0</span>
-                        <input type="number" step="any" id="amountForBillDetails" name="amount" value="" hidden>
+                        <span class="mt-1 mb-1 me-1"><strong>Total : </strong>
+                        <!-- </span><span id="sumForAddBillToAll">0</span> -->
+                        <input type="number" step="any" id="amountForBillDetails" name="amount" value=""  required onkeypress="return false;">
                     </form>
                 </div>
                 <div class="modal-footer">
