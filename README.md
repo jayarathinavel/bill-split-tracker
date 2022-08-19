@@ -1,55 +1,39 @@
-**index.php** : <br>
-<ul>
-<p>
-Takes the value after the URL and includes the particular Model View and Controller PHP files, if present in the corresponding folders under same name, else shows 404 Page.</p>
+![Screenshot1](docs/Screenshot1.png)
 
-**Example** : <p>
-```http://example.com/home```
-<br>
-In this the value after URL is home. The corresponding files ***home.php***, ***home.phtml***, ***home.php*** should be present in the folders Model View Controller respectively
-<br> 
-***Atleast view file should exist.*** 
-</p>
-</ul>
+Link to App -> [https://bill-split-tracker.herokuapp.com/](https://bill-split-tracker.herokuapp.com/)
 
-**variables.php** :
-<p>
-<ul>
-Holds the the variable values in an array, from the database table variables. The is mainly for dev, to quickly change a value without any need for code modifications. <br> At any place in the project it can be used as <b> $variables['variableName'] </b> to fetch the corresponding value for the provided variable name.
-<br> <b> Example : </b> Main theme
-</ul>
-</p>
+# Weekly Bill Split
 
-**constants.php** :
-<p><ul>
-<li>
-Holds the constant variables.
-</li>
-<li>
-Simply use <b> $variableName</b> to use at any point in the project.
-<br> <b> Example : </b> Project Title
-</ul>
-</p>
+For a group of Friends or Roommates, where one person spends for all people in the house (Food, Snacks, Grocery) and later splits the amount among them at Weekend. This tool can be helpful for the person who is spending, to keep track on the expenses spent Daily.
 
-SQL Query for ***variables*** table :
+### How it works ?
 
-```
-CREATE TABLE `variables` (
-  `name` varchar(100) NOT NULL,
-  `value` varchar(100) NOT NULL
-);
-```
+* Each person can have a separate User Account. He **Logins**, creates a new **Book** and **Adds Person** into the Book. After a spend, he can **Split** the expense among the people added before. He can either add split to a **Single Person or Multiple Persons**,** Split Equally to All** or can **Split Individually**.
+* He can then later edit (Modify/Delete) the entries using Edit Mode.
+* He can switch to an another book or create new one under More dropdown.
+* He can Mark as Paid for the persons after they paid the amount.
+* All these data are saved in Database.
+* There are Fields like Bill Name, Description, Payment Mode to keep a better track on the Bill. The same can be viewed by clicking the Plus icon next to each Split.
 
-SQL Query for ***users*** table :
+### Features
 
-```
-CREATE TABLE users (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `theme` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-);
-```
+* Login/Registration
+* Creating a New Book
+* Switching to Existing Book
+* Adding a Person to the Book
+* Adding a Split to Single Person
+* Adding Splits to Multiple Persons
+* Splitting the Bill Equally among everyone in the Book
+* Delete a Person
+* Modify a Record
+* Modify a Person Name
+* Mark as Paid
+* Calculator within the App
+
+---
+
+# Table Structure
+
+![Screenshot2](docs/Screenshot2.png)
+
+---
