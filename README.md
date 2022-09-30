@@ -1,6 +1,6 @@
 ![Screenshot1](docs/Screenshot1.png)
 
-Link to App -> [https://bill-split-tracker.herokuapp.com/](https://bill-split-tracker.herokuapp.com/)
+Link to App -> [http://bill-split-tracker.infinityfreeapp.com](http://bill-split-tracker.infinityfreeapp.com/home)
 
 # Weekly Bill Split
 

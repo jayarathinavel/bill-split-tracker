@@ -196,7 +196,7 @@
         }
 
         function removeSymbolsAndFormatData($data, $conn2){
-            if(str_contains($data, "~")){
+            if(strpos($data, "~")){
                 $finalData = "";
                 $data = explode(';', $data);
                 for($i = 0; $i < sizeof($data); $i++){
