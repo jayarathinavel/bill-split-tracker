@@ -1,4 +1,5 @@
 <?php
+    const INSERT_BILL_DETAILS = false;
     $weeklyBillSplitModel = new WeeklyBillSplitModel;
     const TD_OPEN = '<td>';
     const TD_CLOSE = '</td>';
@@ -163,8 +164,13 @@
             $existingRecordSql = "SELECT `$day` FROM `weekly-bill-split` WHERE `name` = '$personName' AND `book-id` = '$bookId'";
             $result = $conn2->query($existingRecordSql)->fetch_assoc();
             $existingRecord = $result[$day];
-            $billDetailsId = $this -> insertBillDetails($conn2, $conn);
-            $newRecord = $billDetailsId.'~'.trim($_POST["billName"]) .':'. trim($_POST["amount"]) .'; ';
+            if(INSERT_BILL_DETAILS) {
+                $billDetailsId = $this -> insertBillDetails($conn2, $conn);
+                $newRecord = $billDetailsId.'~'.trim($_POST["billName"]) .':'. trim($_POST["amount"]) .'; ';
+            } else {
+                $newRecord = trim($_POST["billName"]) .':'. trim($_POST["amount"]) .'; ';
+            }
+            
             $modifiedRecord = $existingRecord . $newRecord;
             $sql = "UPDATE `weekly-bill-split` SET `$day` = '$modifiedRecord' WHERE `book-id` = '$bookId' AND `name` = '$personName'";
             $result = $conn->query($sql);
@@ -176,8 +182,12 @@
             $bookId = $this->getBook($conn2)['book-id'];
             $sqlToSelectNames = "SELECT name FROM `weekly-bill-split` WHERE `book-id` = '$bookId'";
             $names = $conn2->query($sqlToSelectNames);
-            $billDetailsId = $this -> insertBillDetails($conn2, $conn);
-            $billName = $billDetailsId.'~'.trim($_POST["billName"]);
+            if(INSERT_BILL_DETAILS) {
+                $billDetailsId = $this -> insertBillDetails($conn2, $conn);
+                $billName = $billDetailsId.'~'.trim($_POST["billName"]);
+            } else {
+                $billName = trim($_POST["billName"]);
+            }
             if ($names->num_rows>0) {
                 while ($row = $names->fetch_assoc()) {
                     $personName = $row['name'];
@@ -224,7 +234,7 @@
             else{
                 $data = str_replace(':', ' : ', $data);
                 $data = str_replace(';','<br>', $data);
-                return $data; 
+                return $data;
             }
         }
 
